@@ -12,7 +12,7 @@ var SocialShareKit = (function () {
         options = opts || {};
         supportsShare = /(twitter|facebook|google-plus|pinterest|tumblr|vk|linkedin|email)/;
         ready(function () {
-            els = $(options.selector || '.dcs');
+            els = $(options.selector || '.ssk');
             if (!els.length)
                 return;
 

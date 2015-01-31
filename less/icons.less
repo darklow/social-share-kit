@@ -1,4 +1,4 @@
-.dcs {
+.ssk {
     @padding-base: 7px;
     @font-size-base: 22px;
     background-color: @gray;
@@ -17,15 +17,15 @@
         font-size: @font-size-base;
         top: 0;
     }
-    &.dcs-xs, .dcs-xs > & {
+    &.ssk-xs, .ssk-xs > & {
         &:before, .glyphicon { font-size: @font-size-base - 7; }
         padding: @padding-base - 3;
     }
-    &.dcs-sm, .dcs-sm > & {
+    &.ssk-sm, .ssk-sm > & {
         &:before, .glyphicon { font-size: @font-size-base - 2; }
         padding: @padding-base - 2;
     }
-    &.dcs-lg, .dcs-lg > & {
+    &.ssk-lg, .ssk-lg > & {
         &:before, .glyphicon { font-size: @font-size-base + 6; }
         padding: @padding-base + 2;
     }
@@ -40,7 +40,7 @@
         text-decoration: none;
     }
     // Icon only
-    &.dcs-icon {
+    &.ssk-icon {
         color: @gray;
         padding: 2px;
         &, &:hover {
@@ -51,18 +51,18 @@
         }
         // Sizing
         font-size: 24px;
-        &.dcs-xs, .dcs-xs > & {
+        &.ssk-xs, .ssk-xs > & {
             font-size: 16px;
         }
-        &.dcs-sm, .dcs-sm > & {
+        &.ssk-sm, .ssk-sm > & {
             font-size: 20px;
         }
-        &.dcs-lg, .dcs-lg > & {
+        &.ssk-lg, .ssk-lg > & {
             font-size: 28px;
         }
     }
     // With text
-    &.dcs-text {
+    &.ssk-text {
         overflow: hidden;
         font-size: 17px;
         line-height: normal;
@@ -74,7 +74,7 @@
             vertical-align: bottom;
             text-indent: 0;
         }
-        .dcs-block & {
+        .ssk-block & {
             display: block;
             margin-right: 0;
             text-align: left;
@@ -88,63 +88,63 @@
                 padding: @p-base;
             }
         }
-        &.dcs-xs, .dcs-xs > & {
+        &.ssk-xs, .ssk-xs > & {
             .size-mixin(12px, @padding-base - 3);
         }
-        &.dcs-sm, .dcs-sm > & {
+        &.ssk-sm, .ssk-sm > & {
             .size-mixin(16px, @padding-base - 2);
         }
-        &.dcs-lg, .dcs-lg > & {
+        &.ssk-lg, .ssk-lg > & {
             .size-mixin(22px, @padding-base + 2);
         }
     }
 }
-.dcs-group, .dcs-sticky {
+.ssk-group, .ssk-sticky {
     font-size: 0;
 }
-.dcs-sticky {
+.ssk-sticky {
     top: 0;
     position: fixed;
     z-index: 2000;
     @sticky-hover-padding: 15px;
-    .dcs {
+    .ssk {
         .transition(padding 0.1s ease-out);
         margin: 0;
     }
-    &.dcs-left, &.dcs-right {
-        .dcs {
+    &.ssk-left, &.ssk-right {
+        .ssk {
             display: block;
             clear: both;
         }
-        &.dcs-center {
+        &.ssk-center {
             top: 50%;
             .transform(translateY(-50%));
         }
     }
-    &.dcs-left {
+    &.ssk-left {
         left: 0;
-        .dcs {
+        .ssk {
             float: left;
             &:hover { padding-left: @sticky-hover-padding; }
         }
     }
-    &.dcs-right {
+    &.ssk-right {
         right: 0;
-        .dcs {
+        .ssk {
             float: right;
             &:hover { padding-right: @sticky-hover-padding; }
         }
     }
-    &.dcs-bottom {
+    &.ssk-bottom {
         font-size: 0;
         top: auto;
         bottom: 0;
-        &.dcs-center {
+        &.ssk-center {
             left: 50%;
             right: auto;
             .transform(translateX(-50%));
         }
-        .dcs {
+        .ssk {
             vertical-align: bottom;
             &:hover { padding-bottom: @sticky-hover-padding; }
         }
@@ -154,30 +154,30 @@
     }
 }
 // Mixin for network icon
-.make-dcs-icon(@name, @full: true) {
+.make-ssk-icon(@name, @full: true) {
     @color_name: ~"color-@{name}";
-    @cls_name: ~".dcs-@{name}";
+    @cls_name: ~".ssk-@{name}";
     @color: @@color_name;
     @color-darken: darken(@color, 10%);
     @{cls_name} {
         background-color: @color;
-        .dcs-grayscale > & when (@full = true) {
+        .ssk-grayscale > & when (@full = true) {
             background-color: @gray;
         }
         &:hover {
-            // This must be after ".dcs-grayscale > &"
+            // This must be after ".ssk-grayscale > &"
             background-color: @color-darken;
         }
         &:hover when (@full = true) {
             background-color: @color-darken;
-            .dcs-grayscale > & {
+            .ssk-grayscale > & {
                 background-color: @color;
             }
-            .dcs-grayscale > & when (@name = 'email') {
+            .ssk-grayscale > & when (@name = 'email') {
                 background-color: @color-darken;
             }
         }
-        &.dcs-icon when (@full = true) {
+        &.ssk-icon when (@full = true) {
             color: @color;
             &:hover {
                 color: @color-darken;
@@ -191,40 +191,40 @@
     }
 }
 // Mixin for extra color
-.make-dcs-color(@name) {
-    .make-dcs-icon(@name, false);
+.make-ssk-color(@name) {
+    .make-ssk-icon(@name, false);
 }
 
 // Network icons
-.make-dcs-icon('facebook');
-.make-dcs-icon('twitter');
-.make-dcs-icon('google-plus');
-.make-dcs-icon('pinterest');
-.make-dcs-icon('tumblr');
-.make-dcs-icon('email');
-.make-dcs-icon('vk');
-.make-dcs-icon('linkedin');
+.make-ssk-icon('facebook');
+.make-ssk-icon('twitter');
+.make-ssk-icon('google-plus');
+.make-ssk-icon('pinterest');
+.make-ssk-icon('tumblr');
+.make-ssk-icon('email');
+.make-ssk-icon('vk');
+.make-ssk-icon('linkedin');
 
 // Extra colors
-.make-dcs-color('turquoise');
-.make-dcs-color('emerald');
-.make-dcs-color('peter-river');
-.make-dcs-color('belize-hole');
-.make-dcs-color('amethyst');
-.make-dcs-color('wisteria');
-.make-dcs-color('wet-asphalt');
-.make-dcs-color('midnight-blue');
-.make-dcs-color('green-sea');
-.make-dcs-color('nephritis');
-.make-dcs-color('sunflower');
-.make-dcs-color('orange');
-.make-dcs-color('carrot');
-.make-dcs-color('pumpkin');
-.make-dcs-color('alizarin');
-.make-dcs-color('pomegranate');
-.make-dcs-color('clouds');
-.make-dcs-color('concrete');
-.make-dcs-color('silver');
-.make-dcs-color('asbestos');
-.make-dcs-color('dark-gray');
-.make-dcs-color('black');
+.make-ssk-color('turquoise');
+.make-ssk-color('emerald');
+.make-ssk-color('peter-river');
+.make-ssk-color('belize-hole');
+.make-ssk-color('amethyst');
+.make-ssk-color('wisteria');
+.make-ssk-color('wet-asphalt');
+.make-ssk-color('midnight-blue');
+.make-ssk-color('green-sea');
+.make-ssk-color('nephritis');
+.make-ssk-color('sunflower');
+.make-ssk-color('orange');
+.make-ssk-color('carrot');
+.make-ssk-color('pumpkin');
+.make-ssk-color('alizarin');
+.make-ssk-color('pomegranate');
+.make-ssk-color('clouds');
+.make-ssk-color('concrete');
+.make-ssk-color('silver');
+.make-ssk-color('asbestos');
+.make-ssk-color('dark-gray');
+.make-ssk-color('black');
