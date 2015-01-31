@@ -1,0 +1,230 @@
+.dcs {
+    @padding-base: 7px;
+    @font-size-base: 22px;
+    background-color: @gray;
+    color: white;
+    display: inline-block;
+    font-size: @font-size-base;
+    line-height: 1px;
+    margin-right: 2px;
+    margin-bottom: 2px;
+    padding: @padding-base;
+    text-align: center;
+    text-decoration: none;
+    .transition(background-color 0.1s);
+    // Sizing;
+    &:before, .glyphicon {
+        font-size: @font-size-base;
+        top: 0;
+    }
+    &.dcs-xs, .dcs-xs > & {
+        &:before, .glyphicon { font-size: @font-size-base - 7; }
+        padding: @padding-base - 3;
+    }
+    &.dcs-sm, .dcs-sm > & {
+        &:before, .glyphicon { font-size: @font-size-base - 2; }
+        padding: @padding-base - 2;
+    }
+    &.dcs-lg, .dcs-lg > & {
+        &:before, .glyphicon { font-size: @font-size-base + 6; }
+        padding: @padding-base + 2;
+    }
+    &:last-child {
+        margin-right: 0;
+    }
+    &:hover {
+        background-color: @gray-dark;
+    }
+    &:hover, &:focus {
+        color: #fff;
+        text-decoration: none;
+    }
+    // Icon only
+    &.dcs-icon {
+        color: @gray;
+        padding: 2px;
+        &, &:hover {
+            background-color: transparent;
+        }
+        &:hover {
+            color: @gray-dark;
+        }
+        // Sizing
+        font-size: 24px;
+        &.dcs-xs, .dcs-xs > & {
+            font-size: 16px;
+        }
+        &.dcs-sm, .dcs-sm > & {
+            font-size: 20px;
+        }
+        &.dcs-lg, .dcs-lg > & {
+            font-size: 28px;
+        }
+    }
+    // With text
+    &.dcs-text {
+        overflow: hidden;
+        font-size: 17px;
+        line-height: normal;
+        padding-right: floor(@padding-base*1.5);
+        &:before, .glyphicon {
+            margin: -@padding-base floor(@padding-base*1.5) -@padding-base -@padding-base;
+            padding: @padding-base;
+            background-color: rgba(0, 0, 0, .15);
+            vertical-align: bottom;
+            text-indent: 0;
+        }
+        .dcs-block & {
+            display: block;
+            margin-right: 0;
+            text-align: left;
+        }
+        // Sizing
+        .size-mixin(@font-size, @p-base) {
+            font-size: @font-size;
+            padding-right: ceil(@p-base*1.4);
+            &:before, .glyphicon {
+                margin: -@p-base floor(@p-base*1.5) -@p-base -@p-base;
+                padding: @p-base;
+            }
+        }
+        &.dcs-xs, .dcs-xs > & {
+            .size-mixin(12px, @padding-base - 3);
+        }
+        &.dcs-sm, .dcs-sm > & {
+            .size-mixin(16px, @padding-base - 2);
+        }
+        &.dcs-lg, .dcs-lg > & {
+            .size-mixin(22px, @padding-base + 2);
+        }
+    }
+}
+.dcs-group, .dcs-sticky {
+    font-size: 0;
+}
+.dcs-sticky {
+    top: 0;
+    position: fixed;
+    z-index: 2000;
+    @sticky-hover-padding: 15px;
+    .dcs {
+        .transition(padding 0.1s ease-out);
+        margin: 0;
+    }
+    &.dcs-left, &.dcs-right {
+        .dcs {
+            display: block;
+            clear: both;
+        }
+        &.dcs-center {
+            top: 50%;
+            .transform(translateY(-50%));
+        }
+    }
+    &.dcs-left {
+        left: 0;
+        .dcs {
+            float: left;
+            &:hover { padding-left: @sticky-hover-padding; }
+        }
+    }
+    &.dcs-right {
+        right: 0;
+        .dcs {
+            float: right;
+            &:hover { padding-right: @sticky-hover-padding; }
+        }
+    }
+    &.dcs-bottom {
+        font-size: 0;
+        top: auto;
+        bottom: 0;
+        &.dcs-center {
+            left: 50%;
+            right: auto;
+            .transform(translateX(-50%));
+        }
+        .dcs {
+            vertical-align: bottom;
+            &:hover { padding-bottom: @sticky-hover-padding; }
+        }
+    }
+    @media (max-width: @screen-xs-max) {
+        display: none;
+    }
+}
+// Mixin for network icon
+.make-dcs-icon(@name, @full: true) {
+    @color_name: ~"color-@{name}";
+    @cls_name: ~".dcs-@{name}";
+    @color: @@color_name;
+    @color-darken: darken(@color, 10%);
+    @{cls_name} {
+        background-color: @color;
+        .dcs-grayscale > & when (@full = true) {
+            background-color: @gray;
+        }
+        &:hover {
+            // This must be after ".dcs-grayscale > &"
+            background-color: @color-darken;
+        }
+        &:hover when (@full = true) {
+            background-color: @color-darken;
+            .dcs-grayscale > & {
+                background-color: @color;
+            }
+            .dcs-grayscale > & when (@name = 'email') {
+                background-color: @color-darken;
+            }
+        }
+        &.dcs-icon when (@full = true) {
+            color: @color;
+            &:hover {
+                color: @color-darken;
+            }
+            &:before when (@name = 'facebook') {
+                // Reset facebook special indent
+                text-indent: 0;
+                margin-right: 0;
+            }
+        }
+    }
+}
+// Mixin for extra color
+.make-dcs-color(@name) {
+    .make-dcs-icon(@name, false);
+}
+
+// Network icons
+.make-dcs-icon('facebook');
+.make-dcs-icon('twitter');
+.make-dcs-icon('google-plus');
+.make-dcs-icon('pinterest');
+.make-dcs-icon('tumblr');
+.make-dcs-icon('email');
+.make-dcs-icon('vk');
+.make-dcs-icon('linkedin');
+
+// Extra colors
+.make-dcs-color('turquoise');
+.make-dcs-color('emerald');
+.make-dcs-color('peter-river');
+.make-dcs-color('belize-hole');
+.make-dcs-color('amethyst');
+.make-dcs-color('wisteria');
+.make-dcs-color('wet-asphalt');
+.make-dcs-color('midnight-blue');
+.make-dcs-color('green-sea');
+.make-dcs-color('nephritis');
+.make-dcs-color('sunflower');
+.make-dcs-color('orange');
+.make-dcs-color('carrot');
+.make-dcs-color('pumpkin');
+.make-dcs-color('alizarin');
+.make-dcs-color('pomegranate');
+.make-dcs-color('clouds');
+.make-dcs-color('concrete');
+.make-dcs-color('silver');
+.make-dcs-color('asbestos');
+.make-dcs-color('dark-gray');
+.make-dcs-color('black');

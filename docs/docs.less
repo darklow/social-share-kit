@@ -1,0 +1,190 @@
+/*!
+This CSS file if for documentation index.html page only
+*/
+@header-bg: #1c1c1c;
+@header-height: 100px;
+@font-size-base: 16px;
+@font-family-base: 'Source Sans Pro', sans-serif;
+@line-height-base: 1.6;
+@active-color: #ff6b5b;
+@active-color-light: lighten(@active-color, 10%);
+
+@green: #00D3A3;
+@blue: #00b7d8;
+@gray: #b8b8b8;
+@menu-gray-dark: #666;
+
+@screen-xs-max: 767px;
+@body-nav-offset: 70px;
+
+// Mixins
+.antialiased {
+    -webkit-font-smoothing: antialiased;
+}
+// Styles
+body {
+    line-height: @line-height-base;
+    font-family: @font-family-base;
+    padding-top: @body-nav-offset;
+    font-size: 16px;
+}
+a {
+    color: @active-color;
+    font-weight: 400;
+    &:hover {
+        color: @active-color-light;
+    }
+}
+h2 {
+    font-weight: 700;
+    font-size: 30px;
+    color: #444;
+}
+.navbar-inverse {
+    border: none;
+    .antialiased;
+    .navbar-brand {
+        font-size: 24px;
+        font-weight: 600;
+        color: #ddd;
+        margin-right: 40px;
+    }
+    li > a, .navbar-brand {
+        line-height: 40px;
+        @media (max-width: @screen-xs-max) {
+            line-height: 20px;
+        }
+    }
+    .navbar-nav > li {
+        > a {
+            font-size: 16px;
+            font-weight: 300;
+            padding: 15px 10px 12px;
+            margin-left: 5px;
+            margin-right: 5px;
+            @media (max-width: @screen-xs-max) {
+                padding: 8px 10px;
+            }
+        }
+        &.active {
+            > a, > a:hover {
+                background-color: transparent;
+                color: @active-color;
+                font-weight: 600;
+                border-bottom: 5px solid @active-color;
+                @media (max-width: @screen-xs-max) {
+                    border-bottom-width: 2px;
+                }
+            }
+        }
+    }
+}
+.lead {
+    font-weight: normal;
+    font-size: 20px;
+}
+.content-block {
+    margin-bottom: 70px;
+    min-height: 200px;
+}
+.anchor, .anchor:hover {
+    color: #333;
+    text-decoration: none;
+    @anchor-offset: @body-nav-offset + 30px;
+    h2 {
+        padding-top: @anchor-offset;
+        margin-top: -@anchor-offset;
+    }
+    &.anchor-first {
+        h2 {
+            margin-top: -@body-nav-offset;
+        }
+    }
+}
+.examples {
+    > div > div {
+        margin-bottom: 50px;
+        &:last-child {
+            margin-bottom: 0;
+        }
+        > div {
+            margin: 10px 0 5px;
+        }
+    }
+    h3 {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        small {
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    }
+}
+.footer {
+    min-height: 120px;
+    margin-top: 150px;
+    padding-top: 30px;
+    background-color: #eee;
+    .copy {
+        font-weight: 500;
+        color: #666;
+    }
+    .license {
+        text-align: right;
+        font-size: 14px;
+        line-height: normal;
+        .license-logo {
+            float: right;
+            margin-left: 10px;
+        }
+    }
+}
+.btn {
+    border-radius: 0;
+    &.btn-primary {
+        background-color: @blue;
+        border-color: @blue;
+        &:hover {
+            background-color: lighten(@blue, 5%);
+        }
+    }
+    &.btn-success {
+        background-color: @green;
+        border-color: @green;
+        &:hover {
+            background-color: lighten(@green, 5%);
+        }
+    }
+}
+.panel {
+    .table {
+        tr:nth-child(3) td {
+            height: 120px;
+            @media (max-width: @screen-xs-max) {
+                height: auto;
+            }
+        }
+        .paypal {
+            padding: 5px 0;
+        }
+    }
+}
+.text-muted {
+    color: #999;
+    &.text-center {
+        margin-top: -10px;
+        font-weight: 300;
+    }
+}
+pre {
+    margin-top: 4px;
+    border-radius: 0;
+    padding: 6px !important;
+    border-color: #eee !important;
+}
+blockquote {
+    font-size: @font-size-base;
+    h4 {
+        margin-top: 0;
+    }
+}
