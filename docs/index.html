@@ -541,7 +541,7 @@
         <p>You must also initialize Social Share Kit plugin. Put following before your closing
             <code>&lt;/body&gt;</code>
             tag or call whenever you want share popups to initialize. <br/>
-            <code>ssk.init()</code>
+            <code>SocialShareKit.init()</code>
             method will automatically attach to
             <code>document.ready</code>
             event itself, so no need to wrap it in
@@ -549,7 +549,7 @@
             function in case if you have jQuery also included.
         </p>
         <pre class="prettyprint">&lt;script type="text/javascript"&gt;
-ssk.init();
+SocialShareKit.init();
 &lt;script&gt;</pre>
 
 
@@ -566,7 +566,7 @@ ssk.init();
 
         <blockquote>
 
-            <h4>1. Pass options with ssk.init(options)</h4>
+            <h4>1. Pass options with SocialShareKit.init(options)</h4>
 
             <p>Options can be passed as object with following keys:</p>
 
@@ -596,7 +596,7 @@ ssk.init();
             </dl>
             <p>For example:</p>
         <pre class="prettyprint lang-js">&lt;script type="text/javascript"&gt;
-ssk.init({
+SocialShareKit.init({
     selector: '.custom-parent .ssk',
     url: 'http://my-url',
     text: 'Share text default',
