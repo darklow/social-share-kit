@@ -157,10 +157,10 @@ var SocialShareKit = (function () {
         return url;
     }
 
-    function getMetaContent(tagName) {
-        var tmp = $('meta[name="' + tagName + '"]'), text;
-        if (tmp.length) {
-            text = tmp[0].getAttribute('content') || '';
+    function getMetaContent(tagName, attr) {
+        var text, tag = $('meta[' + (attr ? attr : tagName.indexOf('og:') === 0 ? 'property' : 'name') + '="' + tagName + '"]');
+        if (tag.length) {
+            text = tag[0].getAttribute('content') || '';
         }
         return text || ''
     }
