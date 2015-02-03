@@ -252,6 +252,34 @@
         </div>
         <div class="col-xs-12 col-sm-6">
             <div>
+                <h3 class="page-header">Round & rounded</h3>
+
+                <div class="ssk-group ssk-round">
+                    <a href="" class="ssk ssk-facebook"></a>
+                    <a href="" class="ssk ssk-twitter"></a>
+                    <a href="" class="ssk ssk-google-plus"></a>
+                    <a href="" class="ssk ssk-pinterest"></a>
+                    <a href="" class="ssk ssk-tumblr"></a>
+                    <a href="" class="ssk ssk-email"></a>
+                </div>
+                <div class="ssk-group ssk-rounded">
+                    <a href="" class="ssk ssk-facebook"></a>
+                    <a href="" class="ssk ssk-twitter"></a>
+                    <a href="" class="ssk ssk-google-plus"></a>
+                    <a href="" class="ssk ssk-pinterest"></a>
+                    <a href="" class="ssk ssk-tumblr"></a>
+                    <a href="" class="ssk ssk-email"></a>
+                </div>
+                <div class="ssk-group ssk-sm">
+                    <a href="" class="ssk ssk-twitter"></a>
+                    <a href="" class="ssk ssk-twitter ssk-rounded"></a>
+                    <a href="" class="ssk ssk-twitter ssk-round"></a>
+                    <a href="" class="ssk ssk-pinterest ssk-round"></a>
+                    <a href="" class="ssk ssk-pinterest ssk-rounded"></a>
+                    <a href="" class="ssk ssk-pinterest"></a>
+                </div>
+            </div>
+            <div>
                 <h3 class="page-header">Grayscale</h3>
 
                 <div class="ssk-group ssk-sm ssk-grayscale">
@@ -338,9 +366,25 @@
             </div>
             <div>
                 <h3 class="page-header">Floating/sticky bar</h3>
-                <a href="" class="sticky-changer" data-pos="left">Left side</a> &nbsp;
-                <a href="" class="sticky-changer" data-pos="right">Right side</a> &nbsp;
-                <a href="" class="sticky-changer" data-pos="bottom">Bottom</a>
+
+                <p>
+                    <a href="" class="active sticky-changer" data-cls="ssk-left">Left side</a> &nbsp;
+                    <a href="" class="sticky-changer" data-cls="ssk-right">Right side</a> &nbsp;
+                    <a href="" class="sticky-changer" data-cls="ssk-bottom">Bottom</a> &nbsp;
+                </p>
+
+                <p>
+                    <a href="" class="active sticky-changer" data-cls="">Square</a> &nbsp;
+                    <a href="" class="sticky-changer" data-cls="ssk-round">Round</a> &nbsp;
+                    <a href="" class="sticky-changer" data-cls="ssk-rounded">Rounded</a> &nbsp;
+                </p>
+
+                <p>
+                    <a href="" class="sticky-changer" data-cls="ssk-lg">Large</a> &nbsp;
+                    <a href="" class="active sticky-changer" data-cls="">Regular</a> &nbsp;
+                    <a href="" class="sticky-changer" data-cls="ssk-sm">Small</a> &nbsp;
+                    <a href="" class="sticky-changer" data-cls="ssk-xs">Extra small</a> &nbsp;
+                </p>
             </div>
         </div>
     </div>
@@ -880,7 +924,12 @@ SocialShareKit.init({
         // Sticky icons changer
         $('.sticky-changer').click(function (e) {
             e.preventDefault();
-            $('.ssk-sticky').removeClass('ssk-left ssk-right ssk-bottom').addClass('ssk-' + $(this).data('pos'));
+            var $link = $(this);
+            $('.ssk-sticky').removeClass($link.parent().children().map(function () {
+                return $(this).data('cls');
+            }).get().join(' ')).addClass($link.data('cls'));
+            $link.parent().find('.active').removeClass('active');
+            $link.addClass('active').blur();
         });
     });
 

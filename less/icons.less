@@ -39,6 +39,18 @@
         color: #fff;
         text-decoration: none;
     }
+    // Round
+    &.ssk-round, .ssk-round & {
+        border-radius: 50%;
+        &:before {
+            text-indent: 0;
+            margin-right: 0;
+        }
+    }
+    // Round
+    &.ssk-rounded, .ssk-rounded & {
+        border-radius: 15%;
+    }
     // Icon only
     &.ssk-icon {
         color: @gray;
@@ -149,6 +161,20 @@
             &:hover { padding-bottom: @sticky-hover-padding; }
         }
     }
+    &.ssk-round {
+        &.ssk-xs .ssk:hover {
+            padding: round(@sticky-hover-padding / 2);
+        }
+        &.ssk-sm .ssk:hover {
+            padding: round(@sticky-hover-padding / 1.6);
+        }
+        .ssk:hover {
+            padding: round(@sticky-hover-padding / 1.4);
+        }
+        &.ssk-lg .ssk:hover {
+            padding: round(@sticky-hover-padding / 1.2);
+        }
+    }
     @media (max-width: @screen-xs-max) {
         display: none;
     }
@@ -194,7 +220,6 @@
 .make-ssk-color(@name) {
     .make-ssk-icon(@name, false);
 }
-
 // Network icons
 .make-ssk-icon('facebook');
 .make-ssk-icon('twitter');
