@@ -28,8 +28,7 @@ var SocialShareKit = (function () {
                 if (el.parentNode.className.indexOf('ssk-count') !== -1) {
                     //networksToCount.push(network);
                     network = network[0];
-                    var shareUrl = getShareUrl(network, el),
-                        uniqueKey = network + sep + shareUrl;
+                        uniqueKey = network + sep + getShareUrl(network, el);
                     if (!(uniqueKey in urlsToCount)) {
                         urlsToCount[uniqueKey] = [];
                     }
@@ -262,17 +261,8 @@ var SocialShareKit = (function () {
                 };
                 break;
         }
-        url && parseFunc && JSONPRequest(url, parseFunc);
+        url && parseFunc && JSONPRequest(network, url, parseFunc);
     }
-
-
-    var VK = {
-        Share: {
-            count: function (value, count) {
-                $('#vkontakte_count').html(count);
-            }
-        }
-    };
 
     function JSONPRequest(network, url, callback) {
         var callbackName = 'cb_' + network + '_' + Math.round(100000 * Math.random()),
