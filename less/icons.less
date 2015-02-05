@@ -179,6 +179,37 @@
         display: none;
     }
 }
+.ssk-count {
+    padding-top: 20px;
+    .ssk {
+        position: relative;
+    }
+    .ssk-num {
+        border-radius: 4px;
+        color: lighten(@gray, 10%);
+        background-color: rgba(50, 50, 50, .03);
+        display: block;
+        font-size: 12px;
+        left: 0;
+        line-height: 20px;
+        position: absolute;
+        right: 0;
+        text-align: center;
+        top: -20px;
+    }
+    &.ssk-sticky {
+        padding-top: 0;
+
+        &.ssk-left {
+            .ssk-num {
+                background-color: transparent;
+                left: 100%;
+                top: 20%;
+                margin-left: 5px;
+            }
+        }
+    }
+}
 // Mixin for network icon
 .make-ssk-icon(@name, @full: true) {
     @color_name: ~"color-@{name}";

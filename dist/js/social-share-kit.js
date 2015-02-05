@@ -1,12 +1,12 @@
 /*!
- * Social Share Kit v1.0.0 (http://socialsharekit.com)
+ * Social Share Kit v1.0.1 (http://socialsharekit.com)
  * Copyright 2015 Social Share Kit / Kaspars Sprogis.
  * Licensed under Creative Commons Attribution-NonCommercial 3.0 license:
  * https://github.com/darklow/social-share-kit/blob/master/LICENSE
  * ---
  */
 var SocialShareKit = (function () {
-    var els, options, supportsShare;
+    var els, options, supportsShare, urlsToCount = {}, sep = '*|*';
 
     function init(opts) {
         options = opts || {};
@@ -17,12 +17,27 @@ var SocialShareKit = (function () {
                 return;
 
             each(els, function (el) {
-                if (!elSupportsShare(el)) {
+                var network = elSupportsShare(el);
+                if (!network) {
                     return;
                 }
                 removeEventListener(el, 'click', onClick);
                 addEventListener(el, 'click', onClick);
-            })
+
+                // Gather icons with share counts
+                if (el.parentNode.className.indexOf('ssk-count') !== -1) {
+                    //networksToCount.push(network);
+                    network = network[0];
+                    var shareUrl = getShareUrl(network, el),
+                        uniqueKey = network + sep + shareUrl;
+                    if (!(uniqueKey in urlsToCount)) {
+                        urlsToCount[uniqueKey] = [];
+                    }
+                    urlsToCount[uniqueKey].push(el);
+                }
+            });
+
+            processShareCount();
         });
     }
 
@@ -110,7 +125,7 @@ var SocialShareKit = (function () {
 
     function getUrl(network, el) {
         var url, dataOpts = getDataOpts(network, el),
-            shareUrl = dataOpts['url'] || window.location.href,
+            shareUrl = getShareUrl(network, el, dataOpts),
             shareUrlEnc = encodeURIComponent(shareUrl),
             title = dataOpts['title'] || document.title,
             text = dataOpts['text'] || getMetaContent('description'),
@@ -157,6 +172,11 @@ var SocialShareKit = (function () {
         return url;
     }
 
+    function getShareUrl(network, el, dataOpts) {
+        dataOpts = dataOpts || getDataOpts(network, el);
+        return dataOpts['url'] || window.location.href;
+    }
+
     function getMetaContent(tagName, attr) {
         var text, tag = $('meta[' + (attr ? attr : tagName.indexOf('og:') === 0 ? 'property' : 'name') + '="' + tagName + '"]');
         if (tag.length) {
@@ -179,6 +199,110 @@ var SocialShareKit = (function () {
             }
         }
         return opts;
+    }
+
+    function processShareCount() {
+        var a, ref;
+        for (a in urlsToCount) {
+            ref = a.split(sep);
+            (function (els) {
+                getCount(ref[0], ref[1], function (cnt) {
+                    for (var c in els)
+                        addCount(els[c], cnt);
+                });
+            })(urlsToCount[a]);
+        }
+    }
+
+    function addCount(el, cnt) {
+        var newEl = document.createElement('div');
+        newEl.innerHTML = cnt;
+        newEl.className = 'ssk-num';
+        el.appendChild(newEl);
+    }
+
+    function getCount(network, shareUrl, onReady) {
+        var url, parseFunc;
+        shareUrl = encodeURIComponent(shareUrl);
+        switch (network) {
+            case 'facebook':
+                url = 'http://graph.facebook.com/?id=' + shareUrl;
+                parseFunc = function (r) {
+                    return onReady(r.shares);
+                };
+                break;
+            case 'twitter':
+                url = 'http://cdn.api.twitter.com/1/urls/count.json?url=' + shareUrl;
+                parseFunc = function (r) {
+                    return onReady(r.count);
+                };
+                break;
+            case 'google-plus':
+                url = 'http://share.yandex.ru/gpp.xml?url=' + shareUrl;
+                parseFunc = function (r) {
+                    return onReady(r);
+                };
+                break;
+            case 'linkedin':
+                url = 'http://www.linkedin.com/countserv/count/share?url=' + shareUrl;
+                parseFunc = function (r) {
+                    return onReady(r.count);
+                };
+                break;
+            case 'pinterest':
+                url = 'http://api.pinterest.com/v1/urls/count.json?url=' + shareUrl;
+                parseFunc = function (r) {
+                    return onReady(r.count);
+                };
+                break;
+            case 'vk':
+                url = 'http://vk.com/share.php?act=count&url=' + shareUrl;
+                parseFunc = function (r) {
+                    return onReady(r);
+                };
+                break;
+        }
+        url && parseFunc && JSONPRequest(url, parseFunc);
+    }
+
+
+    var VK = {
+        Share: {
+            count: function (value, count) {
+                $('#vkontakte_count').html(count);
+            }
+        }
+    };
+
+    function JSONPRequest(network, url, callback) {
+        var callbackName = 'cb_' + network + '_' + Math.round(100000 * Math.random()),
+            script = document.createElement('script');
+        window[callbackName] = function (data) {
+            try { // IE8
+                delete window[callbackName];
+            } catch (e) {
+            }
+            document.body.removeChild(script);
+            callback(data);
+        };
+        if (network == 'vk') {
+            window['VK'] = {
+                Share: {
+                    count: function (a, b) {
+                        window[callbackName](b);
+                    }
+                }
+            };
+        } else if (network == 'google-plus') {
+            window['services'] = {
+                gplus: {
+                    cb: window[callbackName]
+                }
+            };
+        }
+        script.src = url + (url.indexOf('?') >= 0 ? '&' : '?') + 'callback=' + callbackName;
+        document.body.appendChild(script);
+        return true;
     }
 
     return {
