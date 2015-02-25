@@ -227,7 +227,7 @@ var SocialShareKit = (function () {
             case 'facebook':
                 url = 'http://graph.facebook.com/?id=' + shareUrl;
                 parseFunc = function (r) {
-                    return onReady(r.shares);
+                    return onReady(r.shares ? r.shares : 0);
                 };
                 break;
             case 'twitter':
