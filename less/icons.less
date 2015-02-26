@@ -200,12 +200,23 @@
     &.ssk-sticky {
         padding-top: 0;
 
+        &.ssk-left, &.ssk-right {
+            .ssk-num {
+                top: 20%;
+                background-color: transparent;
+            }
+        }
         &.ssk-left {
             .ssk-num {
-                background-color: transparent;
                 left: 100%;
-                top: 20%;
                 margin-left: 5px;
+            }
+        }
+        &.ssk-right {
+            .ssk-num {
+                right: 115%;
+                margin-left: -100%;
+                text-align: right;
             }
         }
     }
