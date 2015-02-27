@@ -17,7 +17,7 @@ var SocialShareKit = (function () {
                 return;
 
             each(els, function (el) {
-                var network = elSupportsShare(el);
+                var network = elSupportsShare(el), uniqueKey;
                 if (!network) {
                     return;
                 }
@@ -28,7 +28,7 @@ var SocialShareKit = (function () {
                 if (el.parentNode.className.indexOf('ssk-count') !== -1) {
                     //networksToCount.push(network);
                     network = network[0];
-                        uniqueKey = network + sep + getShareUrl(network, el);
+                    uniqueKey = network + sep + getShareUrl(network, el);
                     if (!(uniqueKey in urlsToCount)) {
                         urlsToCount[uniqueKey] = [];
                     }
@@ -126,8 +126,8 @@ var SocialShareKit = (function () {
         var url, dataOpts = getDataOpts(network, el),
             shareUrl = getShareUrl(network, el, dataOpts),
             shareUrlEnc = encodeURIComponent(shareUrl),
-            title = dataOpts['title'] || document.title,
-            text = dataOpts['text'] || getMetaContent('description'),
+            title = typeof dataOpts['title'] !== 'undefined' ? dataOpts['title'] : document.title,
+            text = typeof dataOpts['text'] !== 'undefined' ? dataOpts['text'] : getMetaContent('description'),
             image = dataOpts['image'], via = dataOpts['via'];
         switch (network) {
             case 'facebook':
@@ -135,7 +135,7 @@ var SocialShareKit = (function () {
                 break;
             case 'twitter':
                 url = 'https://twitter.com/share?url=' + shareUrlEnc +
-                '&text=' + encodeURIComponent(title + ' - ' + text);
+                '&text=' + encodeURIComponent(title + (text && title ? ' - ' : '') + text);
                 via = via || getMetaContent('twitter:site');
                 if (via)
                     url += '&via=' + via.replace('@', '');
@@ -192,8 +192,8 @@ var SocialShareKit = (function () {
             optKey = validOpts[a];
             dataKey = 'data-' + optKey;
             optValue = el.getAttribute(dataKey) || parent.getAttribute(dataKey) ||
-            (options[network] && options[network][optKey] ? options[network][optKey] : options[optKey]);
-            if (optValue) {
+            (options[network] && typeof options[network][optKey] != 'undefined' ? options[network][optKey] : options[optKey]);
+            if (typeof optValue != 'undefined') {
                 opts[optKey] = optValue;
             }
         }
