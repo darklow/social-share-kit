@@ -221,47 +221,68 @@ var SocialShareKit = (function () {
     }
 
     function getCount(network, shareUrl, onReady) {
-        var url, parseFunc;
-        shareUrl = encodeURIComponent(shareUrl);
+        var url, parseFunc, body,
+            shareUrlEnc = encodeURIComponent(shareUrl);
         switch (network) {
             case 'facebook':
-                url = 'http://graph.facebook.com/?id=' + shareUrl;
+                url = 'http://graph.facebook.com/?id=' + shareUrlEnc;
                 parseFunc = function (r) {
                     return onReady(r.shares ? r.shares : 0);
                 };
                 break;
             case 'twitter':
-                url = 'http://cdn.api.twitter.com/1/urls/count.json?url=' + shareUrl;
+                url = 'http://cdn.api.twitter.com/1/urls/count.json?url=' + shareUrlEnc;
                 parseFunc = function (r) {
                     return onReady(r.count);
                 };
                 break;
             case 'google-plus':
-                url = 'http://share.yandex.ru/gpp.xml?url=' + shareUrl;
+                url = 'https://clients6.google.com/rpc?key=AIzaSyCKSbrvQasunBoV16zDH9R33D88CeLr9gQ';
+                body = "[{\"method\":\"pos.plusones.get\",\"id\":\"p\"," +
+                "\"params\":{\"id\":\"" + shareUrl + "\",\"userId\":\"@viewer\",\"groupId\":\"@self\",\"nolog\":true}," +
+                "\"jsonrpc\":\"2.0\",\"key\":\"p\",\"apiVersion\":\"v1\"}]";
                 parseFunc = function (r) {
-                    return onReady(r);
+                    r = JSON.parse(r);
+                    if (r.length) {
+                        return onReady(r[0].result.metadata.globalCounts.count);
+                    }
                 };
-                break;
+                ajax(url, parseFunc, body);
+                return;
             case 'linkedin':
-                url = 'http://www.linkedin.com/countserv/count/share?url=' + shareUrl;
+                url = 'http://www.linkedin.com/countserv/count/share?url=' + shareUrlEnc;
                 parseFunc = function (r) {
                     return onReady(r.count);
                 };
                 break;
             case 'pinterest':
-                url = 'http://api.pinterest.com/v1/urls/count.json?url=' + shareUrl;
+                url = 'http://api.pinterest.com/v1/urls/count.json?url=' + shareUrlEnc;
                 parseFunc = function (r) {
                     return onReady(r.count);
                 };
                 break;
             case 'vk':
-                url = 'http://vk.com/share.php?act=count&url=' + shareUrl;
+                url = 'http://vk.com/share.php?act=count&url=' + shareUrlEnc;
                 parseFunc = function (r) {
                     return onReady(r);
                 };
                 break;
         }
-        url && parseFunc && JSONPRequest(network, url, parseFunc);
+        url && parseFunc && JSONPRequest(network, url, parseFunc, body);
+    }
+
+    function ajax(url, callback, body) {
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                if (this.status >= 200 && this.status < 400) {
+                    callback(this.responseText);
+                }
+            }
+        };
+        request.open('POST', url, true);
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.send(body);
     }
 
     function JSONPRequest(network, url, callback) {
