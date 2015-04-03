@@ -1,5 +1,5 @@
 /*!
- * Social Share Kit v1.0.1 (http://socialsharekit.com)
+ * Social Share Kit v1.0.3 (http://socialsharekit.com)
  * Copyright 2015 Social Share Kit / Kaspars Sprogis.
  * Licensed under Creative Commons Attribution-NonCommercial 3.0 license:
  * https://github.com/darklow/social-share-kit/blob/master/LICENSE
@@ -126,8 +126,8 @@ var SocialShareKit = (function () {
         var url, dataOpts = getDataOpts(network, el),
             shareUrl = getShareUrl(network, el, dataOpts),
             shareUrlEnc = encodeURIComponent(shareUrl),
-            title = typeof dataOpts['title'] !== 'undefined' ? dataOpts['title'] : document.title,
-            text = typeof dataOpts['text'] !== 'undefined' ? dataOpts['text'] : getMetaContent('description'),
+            title = typeof dataOpts['title'] !== 'undefined' ? dataOpts['title'] : getTitle(network),
+            text = typeof dataOpts['text'] !== 'undefined' ? dataOpts['text'] : getText(network),
             image = dataOpts['image'], via = dataOpts['via'];
         switch (network) {
             case 'facebook':
@@ -174,6 +174,20 @@ var SocialShareKit = (function () {
     function getShareUrl(network, el, dataOpts) {
         dataOpts = dataOpts || getDataOpts(network, el);
         return dataOpts['url'] || window.location.href;
+    }
+
+    function getTitle(network) {
+        var title;
+        if (network == 'twitter')
+            title = getMetaContent('twitter:title');
+        return title || document.title;
+    }
+
+    function getText(network) {
+        var text;
+        if (network == 'twitter')
+            text = getMetaContent('twitter:description');
+        return text || getMetaContent('description');
     }
 
     function getMetaContent(tagName, attr) {
