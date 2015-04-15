@@ -1,9 +1,13 @@
 // Variables
-@gray: #757575;
-@gray-dark: darken(@gray, 20%);
+@ssk-font-path:        "../fonts";
 
-// Responsiveness
-@screen-xs-max: 767px;
+// Set LESS Bootstrap variables only if needed
+.handle-bootstrap-vars(){
+    @gray: #757575;
+    @gray-dark: darken(@gray, 20%);
+    @screen-xs-max: 767px;
+}
+.handle-bootstrap-vars();
 
 // Social colors
 @color-facebook: #255c95;
@@ -39,19 +43,3 @@
 @color-asbestos: #7f8c8d;
 @color-dark-gray: #555;
 @color-black: #333;
-
-// Mixins
-.transition (@transition) {
-    transition: @transition;
-    -webkit-transition: @transition;
-    -moz-transition: @transition;
-    -ms-transition: @transition;
-    -o-transition: @transition;
-}
-.transform(@string) {
-    transform: @string;
-    -webkit-transform: @string;
-    -moz-transform: @string;
-    -ms-transform: @string;
-    -o-transform: @string;
-}
