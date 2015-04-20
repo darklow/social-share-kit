@@ -21,21 +21,21 @@
     }
 
     // Sizing;
-    &:before, .glyphicon, .@{fa-css-prefix} {
+    &:before, .@{glyphicon-css-prefix}, .@{fa-css-prefix} {
         font-size: @font-size-base;
         top: 0;
         vertical-align: middle;
     }
     &.ssk-xs, .ssk-xs > & {
-        &:before, .glyphicon, .@{fa-css-prefix} { font-size: @font-size-base - 7; }
+        &:before, .@{glyphicon-css-prefix}, .@{fa-css-prefix} { font-size: @font-size-base - 7; }
         padding: @padding-base - 3;
     }
     &.ssk-sm, .ssk-sm > & {
-        &:before, .glyphicon, .@{fa-css-prefix} { font-size: @font-size-base - 2; }
+        &:before, .@{glyphicon-css-prefix}, .@{fa-css-prefix} { font-size: @font-size-base - 2; }
         padding: @padding-base - 2;
     }
     &.ssk-lg, .ssk-lg > & {
-        &:before, .glyphicon, .@{fa-css-prefix} { font-size: @font-size-base + 6; }
+        &:before, .@{glyphicon-css-prefix}, .@{fa-css-prefix} { font-size: @font-size-base + 6; }
         padding: @padding-base + 2;
     }
     &:last-child {
@@ -88,7 +88,7 @@
         font-size: 17px;
         line-height: normal;
         padding-right: floor(@padding-base*1.5);
-        &:before, .glyphicon, .@{fa-css-prefix} {
+        &:before, .@{glyphicon-css-prefix}, .@{fa-css-prefix} {
             margin: -@padding-base floor(@padding-base*1.5) -@padding-base -@padding-base;
             padding: @padding-base;
             background-color: rgba(0, 0, 0, .15);
@@ -104,7 +104,7 @@
         .size-mixin(@font-size, @p-base) {
             font-size: @font-size;
             padding-right: ceil(@p-base*1.4);
-            &:before, .glyphicon, .@{fa-css-prefix} {
+            &:before, .@{glyphicon-css-prefix}, .@{fa-css-prefix} {
                 margin: -@p-base floor(@p-base*1.5) -@p-base -@p-base;
                 padding: @p-base;
             }
