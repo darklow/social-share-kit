@@ -12,16 +12,12 @@
     text-align: center;
     text-decoration: none;
     .transition(background-color 0.1s);
-    
-    //Override FontAwesome4 icons
-    .@{fa-css-prefix} {
-        position: relative;
-        text-align: center;
-        width: 1em;
-    }
 
     // Sizing;
     &:before, .@{glyphicon-css-prefix}, .@{fa-css-prefix} {
+        position: relative;
+        text-align: center;
+        width: 1em;
         font-size: @font-size-base;
         top: 0;
         vertical-align: middle;
