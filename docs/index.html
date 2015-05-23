@@ -60,19 +60,30 @@
 <div class="container">
     <div class="content-block">
         <a name="overview" class="anchor anchor-first">
+            <div class="pull-right likes hidden-xs">
+                <div>
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://socialsharekit.com" data-via="SocialshareKit">Tweet</a>
+                    <script>!function (d, s, id) {
+                        var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
+                        if (!d.getElementById(id)) {
+                            js = d.createElement(s);
+                            js.id = id;
+                            js.src = p + '://platform.twitter.com/widgets.js';
+                            fjs.parentNode.insertBefore(js, fjs);
+                        }
+                    }(document, 'script', 'twitter-wjs');</script>
+                </div>
+                <iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fsocialsharekit&amp;width&amp;layout=button_count&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=21&amp;appId=320431201480776" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width: 80px; height:25px;" allowTransparency="true"></iframe>
+                <iframe src="https://plusone.google.com/_/+1/fastbutton?bsv&amp;size=medium&amp;hl=en-US&amp;url=http://socialsharekit.com/&amp;parent=http://socialsharekit.com/" allowtransparency="true" frameborder="0" scrolling="no" title="+1" style="height: 25px; width: 80px;"></iframe>
+            </div>
             <h2 id="overview" class="page-header">
-                <span class="pull-right likes hidden-xs">
-                    <iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fsocialsharekit&amp;width&amp;layout=button_count&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=21&amp;appId=320431201480776" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width: 95px; height:25px;" allowTransparency="true"></iframe>
-                    <iframe src="https://plusone.google.com/_/+1/fastbutton?bsv&amp;size=medium&amp;hl=en-US&amp;url=http://socialsharekit.com/&amp;parent=http://socialsharekit.com/" allowtransparency="true" frameborder="0" scrolling="no" title="+1" style="height: 25px; width: 80px;"></iframe>
-                </span> Overview
-            </h2>
+                Overview </h2>
         </a>
 
         <p class="lead">
             <strong>Social Share Kit</strong> is a library of decent and good looking CSS/JavaScript social sharing tools like
             <strong>social network icons</strong>,
-            <strong>share buttons</strong>,
-            <strong>share count</strong>,
+            <strong>share buttons</strong>, <strong>share count</strong>,
             <strong>floating/sticky button bar</strong> and
             <strong>popups</strong>. </p>
 
@@ -508,7 +519,13 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-8">
                     <h4>Group of icons with share count</h4>
-                    <p>Add <code>.ssk-count</code> class to show share count. <strong>Note:</strong> <code>tumblr</code> share count is currently unavailable, due to absence of an API. </p>
+
+                    <p>Add
+                        <code>.ssk-count</code>
+                        class to show share count. <strong>Note:</strong>
+                        <code>tumblr</code>
+                        share count is currently unavailable, due to absence of an API.
+                    </p>
                     <pre class="prettyprint">&lt;div class="ssk-group ssk-count"&gt;
     &lt;a href="" class="ssk ssk-facebook"&gt;&lt;/a&gt;
     &lt;a href="" class="ssk ssk-twitter"&gt;&lt;/a&gt;
