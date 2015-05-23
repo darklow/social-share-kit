@@ -164,7 +164,7 @@ var SocialShareKit = (function () {
                 url = 'http://vkontakte.ru/share.php?url=' + shareUrlEnc;
                 break;
             case 'email':
-                url = 'mailto:?subject=' + title +
+                url = 'mailto:?subject=' + encodeURIComponent(title) +
                 '&body=' + encodeURIComponent(title + '\n' + shareUrl + '\n\n' + text + '\n');
                 break;
         }
