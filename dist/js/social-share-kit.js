@@ -107,7 +107,7 @@ var SocialShareKit = (function () {
             evt.returnValue = false;
             evt.cancelBubble = true;
         }
-        return evt.target || evt.srcElement;
+        return evt.currentTarget || evt.srcElement;
     }
 
     function winOpen(url) {
