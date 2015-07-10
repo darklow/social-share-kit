@@ -1,0 +1,32 @@
+{
+  "name": "social-share-kit",
+  "version": "1.0.4",
+  "homepage": "http://socialsharekit.com/",
+  "authors": [
+    "Kaspars Sprogis <darklow@gmail.com>"
+  ],
+  "description": "Library of decent and good looking CSS/JavaScript social sharing icons, buttons and popups",
+  "main": "dist/css/social-share-kit.css",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "share",
+    "icons",
+    "buttons",
+    "share",
+    "social"
+  ],
+  "license": "Creative Commons Attribution-NonCommercial 3.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/darklow/social-share-kit.git"
+  }
+}
