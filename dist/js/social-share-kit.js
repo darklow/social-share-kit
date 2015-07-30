@@ -144,24 +144,24 @@ var SocialShareKit = (function () {
                 url = 'https://plus.google.com/share?url=' + shareUrlEnc;
                 break;
             case 'pinterest':
-                url = 'http://pinterest.com/pin/create/button/?url=' + shareUrlEnc +
+                url = 'https://pinterest.com/pin/create/button/?url=' + shareUrlEnc +
                 '&description=' + encodeURIComponent(text);
                 image = image || getMetaContent('og:image');
                 if (image)
                     url += '&media=' + encodeURIComponent(image);
                 break;
             case 'tumblr':
-                url = 'http://www.tumblr.com/share/link?url=' + shareUrlEnc +
+                url = 'https://www.tumblr.com/share/link?url=' + shareUrlEnc +
                 '&name=' + encodeURIComponent(title) +
                 '&description=' + encodeURIComponent(text);
                 break;
             case 'linkedin':
-                url = 'http://www.linkedin.com/shareArticle?mini=true&url=' + shareUrlEnc +
+                url = 'https://www.linkedin.com/shareArticle?mini=true&url=' + shareUrlEnc +
                 '&title=' + encodeURIComponent(title) +
                 '&summary=' + encodeURIComponent(text);
                 break;
             case 'vk':
-                url = 'http://vkontakte.ru/share.php?url=' + shareUrlEnc;
+                url = 'https://vkontakte.ru/share.php?url=' + shareUrlEnc;
                 break;
             case 'email':
                 url = 'mailto:?subject=' + encodeURIComponent(title) +
@@ -239,13 +239,13 @@ var SocialShareKit = (function () {
             shareUrlEnc = encodeURIComponent(shareUrl);
         switch (network) {
             case 'facebook':
-                url = 'http://graph.facebook.com/?id=' + shareUrlEnc;
+                url = 'https://graph.facebook.com/?id=' + shareUrlEnc;
                 parseFunc = function (r) {
                     return onReady(r.shares ? r.shares : 0);
                 };
                 break;
             case 'twitter':
-                url = 'http://cdn.api.twitter.com/1/urls/count.json?url=' + shareUrlEnc;
+                url = 'https://cdn.api.twitter.com/1/urls/count.json?url=' + shareUrlEnc;
                 parseFunc = function (r) {
                     return onReady(r.count);
                 };
@@ -264,19 +264,19 @@ var SocialShareKit = (function () {
                 ajax(url, parseFunc, body);
                 return;
             case 'linkedin':
-                url = 'http://www.linkedin.com/countserv/count/share?url=' + shareUrlEnc;
+                url = 'https://www.linkedin.com/countserv/count/share?url=' + shareUrlEnc;
                 parseFunc = function (r) {
                     return onReady(r.count);
                 };
                 break;
             case 'pinterest':
-                url = 'http://api.pinterest.com/v1/urls/count.json?url=' + shareUrlEnc;
+                url = 'https://api.pinterest.com/v1/urls/count.json?url=' + shareUrlEnc;
                 parseFunc = function (r) {
                     return onReady(r.count);
                 };
                 break;
             case 'vk':
-                url = 'http://vk.com/share.php?act=count&url=' + shareUrlEnc;
+                url = 'https://vk.com/share.php?act=count&url=' + shareUrlEnc;
                 parseFunc = function (r) {
                     return onReady(r);
                 };
