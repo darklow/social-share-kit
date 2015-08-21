@@ -6,38 +6,89 @@
  * ---
  */
 var SocialShareKit = (function () {
-    var els, options, supportsShare, urlsToCount = {}, sep = '*|*';
+    var supportsShare = /(twitter|facebook|google-plus|pinterest|tumblr|vk|linkedin|email)/,
+        sep = '*|*', wrap, _wrap;
 
-    function init(opts) {
-        options = opts || {};
-        supportsShare = /(twitter|facebook|google-plus|pinterest|tumblr|vk|linkedin|email)/;
-        ready(function () {
-            els = $(options.selector || '.ssk');
-            if (!els.length)
-                return;
+    // Wrapper to support multiple instances per page by selector
+    _wrap = function (opts) {
+        var options = opts || {},
+            selector = options.selector || '.ssk';
+        this.nodes = $(selector);
+        this.options = options;
+    };
 
-            each(els, function (el) {
-                var network = elSupportsShare(el), uniqueKey;
-                if (!network) {
+    // Instance related functions
+    _wrap.prototype = {
+        share: function () {
+            var els = this.nodes,
+                options = this.options,
+                urlsToCount = {};
+
+            ready(function () {
+                if (!els.length)
                     return;
-                }
-                removeEventListener(el, 'click', onClick);
-                addEventListener(el, 'click', onClick);
 
-                // Gather icons with share counts
-                if (el.parentNode.className.indexOf('ssk-count') !== -1) {
-                    //networksToCount.push(network);
-                    network = network[0];
-                    uniqueKey = network + sep + getShareUrl(network, el);
-                    if (!(uniqueKey in urlsToCount)) {
-                        urlsToCount[uniqueKey] = [];
+                each(els, function (el) {
+                    var network = elSupportsShare(el), uniqueKey;
+                    if (!network) {
+                        return;
                     }
-                    urlsToCount[uniqueKey].push(el);
-                }
+                    removeEventListener(el, 'click', onClick);
+                    addEventListener(el, 'click', onClick);
+
+                    // Gather icons with share counts
+                    if (el.parentNode.className.indexOf('ssk-count') !== -1) {
+                        network = network[0];
+                        uniqueKey = network + sep + getShareUrl(options, network, el);
+                        if (!(uniqueKey in urlsToCount)) {
+                            urlsToCount[uniqueKey] = [];
+                        }
+                        urlsToCount[uniqueKey].push(el);
+                    }
+                });
+
+                processShareCount();
             });
 
-            processShareCount();
-        });
+            function onClick(e) {
+                var target = preventDefault(e),
+                    match = elSupportsShare(target), url;
+                if (!match)
+                    return;
+
+                url = getUrl(options, match[0], target);
+                if (!url)
+                    return;
+                if (match[0] != 'email') {
+                    winOpen(url);
+                } else {
+                    document.location = url;
+                }
+            }
+
+            function processShareCount() {
+                var a, ref;
+                for (a in urlsToCount) {
+                    ref = a.split(sep);
+                    (function (els) {
+                        getCount(ref[0], ref[1], function (cnt) {
+                            for (var c in els)
+                                addCount(els[c], cnt);
+                        });
+                    })(urlsToCount[a]);
+                }
+            }
+
+            return this.nodes;
+        }
+    };
+
+    wrap = function (selector) {
+        return new _wrap(selector);
+    };
+
+    function init(opts) {
+        return wrap(opts).share();
     }
 
     function ready(fn) {
@@ -83,21 +134,6 @@ var SocialShareKit = (function () {
         return el.className.match(supportsShare);
     }
 
-    function onClick(e) {
-        var target = preventDefault(e),
-            match = elSupportsShare(target), url;
-        if (!match)
-            return;
-
-        url = getUrl(match[0], target);
-        if (!url)
-            return;
-        if (match[0] != 'email') {
-            winOpen(url);
-        } else {
-            document.location = url;
-        }
-    }
 
     function preventDefault(e) {
         var evt = e || window.event; // IE8 compatibility
@@ -122,9 +158,9 @@ var SocialShareKit = (function () {
         return win;
     }
 
-    function getUrl(network, el) {
-        var url, dataOpts = getDataOpts(network, el),
-            shareUrl = getShareUrl(network, el, dataOpts),
+    function getUrl(options, network, el) {
+        var url, dataOpts = getDataOpts(options, network, el),
+            shareUrl = getShareUrl(options, network, el, dataOpts),
             shareUrlEnc = encodeURIComponent(shareUrl),
             title = typeof dataOpts['title'] !== 'undefined' ? dataOpts['title'] : getTitle(network),
             text = typeof dataOpts['text'] !== 'undefined' ? dataOpts['text'] : getText(network),
@@ -135,7 +171,7 @@ var SocialShareKit = (function () {
                 break;
             case 'twitter':
                 url = 'https://twitter.com/share?url=' + shareUrlEnc +
-                '&text=' + encodeURIComponent(title + (text && title ? ' - ' : '') + text);
+                    '&text=' + encodeURIComponent(title + (text && title ? ' - ' : '') + text);
                 via = via || getMetaContent('twitter:site');
                 if (via)
                     url += '&via=' + via.replace('@', '');
@@ -145,34 +181,34 @@ var SocialShareKit = (function () {
                 break;
             case 'pinterest':
                 url = 'https://pinterest.com/pin/create/button/?url=' + shareUrlEnc +
-                '&description=' + encodeURIComponent(text);
+                    '&description=' + encodeURIComponent(text);
                 image = image || getMetaContent('og:image');
                 if (image)
                     url += '&media=' + encodeURIComponent(image);
                 break;
             case 'tumblr':
                 url = 'https://www.tumblr.com/share/link?url=' + shareUrlEnc +
-                '&name=' + encodeURIComponent(title) +
-                '&description=' + encodeURIComponent(text);
+                    '&name=' + encodeURIComponent(title) +
+                    '&description=' + encodeURIComponent(text);
                 break;
             case 'linkedin':
                 url = 'https://www.linkedin.com/shareArticle?mini=true&url=' + shareUrlEnc +
-                '&title=' + encodeURIComponent(title) +
-                '&summary=' + encodeURIComponent(text);
+                    '&title=' + encodeURIComponent(title) +
+                    '&summary=' + encodeURIComponent(text);
                 break;
             case 'vk':
                 url = 'https://vkontakte.ru/share.php?url=' + shareUrlEnc;
                 break;
             case 'email':
                 url = 'mailto:?subject=' + encodeURIComponent(title) +
-                '&body=' + encodeURIComponent(title + '\n' + shareUrl + '\n\n' + text + '\n');
+                    '&body=' + encodeURIComponent(title + '\n' + shareUrl + '\n\n' + text + '\n');
                 break;
         }
         return url;
     }
 
-    function getShareUrl(network, el, dataOpts) {
-        dataOpts = dataOpts || getDataOpts(network, el);
+    function getShareUrl(options, network, el, dataOpts) {
+        dataOpts = dataOpts || getDataOpts(options, network, el);
         return dataOpts['url'] || window.location.href;
     }
 
@@ -198,7 +234,7 @@ var SocialShareKit = (function () {
         return text || ''
     }
 
-    function getDataOpts(network, el) {
+    function getDataOpts(options, network, el) {
         var validOpts = ['url', 'title', 'text', 'image'],
             opts = {}, optValue, optKey, dataKey, a, parent = el.parentNode;
         network == 'twitter' && validOpts.push('via');
@@ -206,7 +242,7 @@ var SocialShareKit = (function () {
             optKey = validOpts[a];
             dataKey = 'data-' + optKey;
             optValue = el.getAttribute(dataKey) || parent.getAttribute(dataKey) ||
-            (options[network] && typeof options[network][optKey] != 'undefined' ? options[network][optKey] : options[optKey]);
+                (options[network] && typeof options[network][optKey] != 'undefined' ? options[network][optKey] : options[optKey]);
             if (typeof optValue != 'undefined') {
                 opts[optKey] = optValue;
             }
@@ -214,18 +250,6 @@ var SocialShareKit = (function () {
         return opts;
     }
 
-    function processShareCount() {
-        var a, ref;
-        for (a in urlsToCount) {
-            ref = a.split(sep);
-            (function (els) {
-                getCount(ref[0], ref[1], function (cnt) {
-                    for (var c in els)
-                        addCount(els[c], cnt);
-                });
-            })(urlsToCount[a]);
-        }
-    }
 
     function addCount(el, cnt) {
         var newEl = document.createElement('div');
@@ -253,8 +277,8 @@ var SocialShareKit = (function () {
             case 'google-plus':
                 url = 'https://clients6.google.com/rpc?key=AIzaSyCKSbrvQasunBoV16zDH9R33D88CeLr9gQ';
                 body = "[{\"method\":\"pos.plusones.get\",\"id\":\"p\"," +
-                "\"params\":{\"id\":\"" + shareUrl + "\",\"userId\":\"@viewer\",\"groupId\":\"@self\",\"nolog\":true}," +
-                "\"jsonrpc\":\"2.0\",\"key\":\"p\",\"apiVersion\":\"v1\"}]";
+                    "\"params\":{\"id\":\"" + shareUrl + "\",\"userId\":\"@viewer\",\"groupId\":\"@self\",\"nolog\":true}," +
+                    "\"jsonrpc\":\"2.0\",\"key\":\"p\",\"apiVersion\":\"v1\"}]";
                 parseFunc = function (r) {
                     r = JSON.parse(r);
                     if (r.length) {
