@@ -153,7 +153,7 @@ var SocialShareKit = (function () {
             opts = 'status=1,resizable=yes' +
                 ',width=' + width + ',height=' + height +
                 ',top=' + top + ',left=' + left;
-        win = window.open(url, '', opts);
+        var win = window.open(url, '', opts);
         win.focus();
         return win;
     }
