@@ -152,8 +152,8 @@ var SocialShareKit = (function () {
             top = (document.documentElement.clientHeight - height) / 2,
             opts = 'status=1,resizable=yes' +
                 ',width=' + width + ',height=' + height +
-                ',top=' + top + ',left=' + left;
-        win = window.open(url, '', opts);
+                ',top=' + top + ',left=' + left,
+            win = window.open(url, '', opts);
         win.focus();
         return win;
     }
