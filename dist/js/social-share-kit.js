@@ -71,7 +71,7 @@ var SocialShareKit = (function () {
                 for (a in urlsToCount) {
                     ref = a.split(sep);
                     (function (els) {
-                        getCount(ref[0], ref[1], function (cnt) {
+                        getCount(ref[0], ref[1], options, function (cnt) {
                             for (var c in els)
                                 addCount(els[c], cnt);
                         });
@@ -258,7 +258,7 @@ var SocialShareKit = (function () {
         el.appendChild(newEl);
     }
 
-    function getCount(network, shareUrl, onReady) {
+    function getCount(network, shareUrl, options, onReady) {
         var url, parseFunc, body,
             shareUrlEnc = encodeURIComponent(shareUrl);
         switch (network) {
@@ -269,10 +269,9 @@ var SocialShareKit = (function () {
                 };
                 break;
             case 'twitter':
-                url = 'https://cdn.api.twitter.com/1/urls/count.json?url=' + shareUrlEnc;
-                parseFunc = function (r) {
-                    return onReady(r.count);
-                };
+                if (options && options.twitter && options.twitter.countCallback) {
+                    options.twitter.countCallback(shareUrl, onReady);
+                }
                 break;
             case 'google-plus':
                 url = 'https://clients6.google.com/rpc?key=AIzaSyCKSbrvQasunBoV16zDH9R33D88CeLr9gQ';

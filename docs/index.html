@@ -729,6 +729,10 @@ SocialShareKit.init();
                     <code>twitter:site</code>
                     of current page. Sreen name of twitter user.
                 </dd>
+                <dt>countCallback</dt>
+                <dd>Networks: Twitter. Default: None.
+                    Since Twitter discontinued count API, you can set count manually (by some third party service maybe) using custom count function. See example below.
+                </dd>
             </dl>
             <p>For example:</p>
         <pre class="prettyprint lang-js">&lt;script type="text/javascript"&gt;
@@ -740,6 +744,11 @@ SocialShareKit.init({
         url: 'http://url-for-twitter',
         text: 'Share text for twitter',
         via: 'twitter-screen-name',
+        countCallback: function(shareUrl, onCountReady) {
+            // Get count somewhere manually and call onCountReady() whenever you got the count.
+            var count = 5;
+            return onCountReady(count);
+        }
     }
 });
 &lt;/script&gt;</pre>
