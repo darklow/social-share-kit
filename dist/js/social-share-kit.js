@@ -172,7 +172,7 @@ var SocialShareKit = (function () {
             case 'twitter':
                 url = 'https://twitter.com/share?url=' + shareUrlEnc +
                     '&text=' + encodeURIComponent(title + (text && title ? ' - ' : '') + text);
-                via = via || getMetaContent('twitter:site');
+                via = typeof via !== 'undefined' ? via : getMetaContent('twitter:site');
                 if (via)
                     url += '&via=' + via.replace('@', '');
                 break;
