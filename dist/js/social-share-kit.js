@@ -52,15 +52,39 @@ var SocialShareKit = (function () {
 
             function onClick(e) {
                 var target = preventDefault(e),
-                    match = elSupportsShare(target), url;
+                    match = elSupportsShare(target),
+                    network = match[0],
+                    url;
+
                 if (!match)
                     return;
 
-                url = getUrl(options, match[0], target);
+                url = getUrl(options, network, target);
                 if (!url)
                     return;
-                if (match[0] != 'email') {
-                    winOpen(url);
+
+                // To use Twitter intent events, replace URL and use Twitter native share JS
+                if (window.twttr && target.getAttribute('href').indexOf('twitter.com/intent/') !== -1) {
+                    target.setAttribute('href', url);
+                    return;
+                }
+
+                if (network != 'email') {
+                    var win = winOpen(url);
+
+                    if (options.onOpen) {
+                        options.onOpen(target, network, url, win);
+                    }
+
+                    if (options.onClose) {
+                        var closeInt = window.setInterval(function () {
+                            if (win.closed !== false) {
+                                window.clearInterval(closeInt);
+                                options.onClose(target, network, url, win);
+                            }
+                        }, 250);
+                    }
+
                 } else {
                     document.location = url;
                 }
@@ -161,50 +185,66 @@ var SocialShareKit = (function () {
     function getUrl(options, network, el) {
         var url, dataOpts = getDataOpts(options, network, el),
             shareUrl = getShareUrl(options, network, el, dataOpts),
-            shareUrlEnc = encodeURIComponent(shareUrl),
             title = typeof dataOpts['title'] !== 'undefined' ? dataOpts['title'] : getTitle(network),
             text = typeof dataOpts['text'] !== 'undefined' ? dataOpts['text'] : getText(network),
-            image = dataOpts['image'], via = dataOpts['via'];
+            image = dataOpts['image'] ? dataOpts['image'] : getMetaContent('og:image'),
+            via = typeof dataOpts['via'] !== 'undefined' ? dataOpts['via'] : getMetaContent('twitter:site'),
+            paramsObj = {
+                shareUrl: shareUrl,
+                title: title,
+                text: text,
+                image: image,
+                via: via,
+                options: options,
+                shareUrlEncoded: function () {
+                    return encodeURIComponent(this.shareUrl);
+                }
+            };
         switch (network) {
             case 'facebook':
-                url = 'https://www.facebook.com/share.php?u=' + shareUrlEnc;
+                url = 'https://www.facebook.com/share.php?u=' + paramsObj.shareUrlEncoded();
                 break;
             case 'twitter':
-                url = 'https://twitter.com/share?url=' + shareUrlEnc +
+                url = 'https://twitter.com/intent/tweet?url=' + paramsObj.shareUrlEncoded() +
                     '&text=' + encodeURIComponent(title + (text && title ? ' - ' : '') + text);
-                via = typeof via !== 'undefined' ? via : getMetaContent('twitter:site');
                 if (via)
                     url += '&via=' + via.replace('@', '');
                 break;
             case 'google-plus':
-                url = 'https://plus.google.com/share?url=' + shareUrlEnc;
+                url = 'https://plus.google.com/share?url=' + paramsObj.shareUrlEncoded();
                 break;
             case 'pinterest':
-                url = 'https://pinterest.com/pin/create/button/?url=' + shareUrlEnc +
+                url = 'https://pinterest.com/pin/create/button/?url=' + paramsObj.shareUrlEncoded() +
                     '&description=' + encodeURIComponent(text);
-                image = image || getMetaContent('og:image');
                 if (image)
                     url += '&media=' + encodeURIComponent(image);
                 break;
             case 'tumblr':
-                url = 'https://www.tumblr.com/share/link?url=' + shareUrlEnc +
+                url = 'https://www.tumblr.com/share/link?url=' + paramsObj.shareUrlEncoded() +
                     '&name=' + encodeURIComponent(title) +
                     '&description=' + encodeURIComponent(text);
                 break;
             case 'linkedin':
-                url = 'https://www.linkedin.com/shareArticle?mini=true&url=' + shareUrlEnc +
+                url = 'https://www.linkedin.com/shareArticle?mini=true&url=' + paramsObj.shareUrlEncoded() +
                     '&title=' + encodeURIComponent(title) +
                     '&summary=' + encodeURIComponent(text);
                 break;
             case 'vk':
-                url = 'https://vkontakte.ru/share.php?url=' + shareUrlEnc;
+                url = 'https://vkontakte.ru/share.php?url=' + paramsObj.shareUrlEncoded();
                 break;
             case 'email':
                 url = 'mailto:?subject=' + encodeURIComponent(title) +
                     '&body=' + encodeURIComponent(title + '\n' + shareUrl + '\n\n' + text + '\n');
                 break;
         }
-        return url;
+
+        paramsObj.networkUrl = url;
+
+        if (options.onBeforeOpen) {
+            options.onBeforeOpen(el, network, paramsObj)
+        }
+
+        return paramsObj.networkUrl;
     }
 
     function getShareUrl(options, network, el, dataOpts) {

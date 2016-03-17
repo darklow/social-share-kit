@@ -65,16 +65,7 @@
         <a name="overview" class="anchor anchor-first">
             <div class="pull-right likes hidden-xs">
                 <div>
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://socialsharekit.com" data-via="SocialshareKit">Tweet</a>
-                    <script>!function (d, s, id) {
-                        var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
-                        if (!d.getElementById(id)) {
-                            js = d.createElement(s);
-                            js.id = id;
-                            js.src = p + '://platform.twitter.com/widgets.js';
-                            fjs.parentNode.insertBefore(js, fjs);
-                        }
-                    }(document, 'script', 'twitter-wjs');</script>
+                    <a href="https://twitter.com/intent/tweet" class="twitter-share-button" data-url="http://socialsharekit.com" data-via="SocialshareKit">Tweet</a>
                 </div>
                 <iframe src="//www.facebook.com/plugins/like.php?href=https%3A%2F%2Fwww.facebook.com%2Fsocialsharekit&amp;width&amp;layout=button_count&amp;action=like&amp;show_faces=false&amp;share=false&amp;height=21&amp;appId=320431201480776" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width: 80px; height:25px;" allowTransparency="true"></iframe>
                 <iframe src="https://plusone.google.com/_/+1/fastbutton?bsv&amp;size=medium&amp;hl=en-US&amp;url=http://socialsharekit.com/&amp;parent=http://socialsharekit.com/" allowtransparency="true" frameborder="0" scrolling="no" title="+1" style="height: 25px; width: 80px;"></iframe>
@@ -783,8 +774,47 @@ SocialShareKit.init({
 &lt;/div></pre>
         </blockquote>
 
-    </div>
+        <h3 about="page-header">Events and callbacks</h3>
 
+        <p>
+            <strong>onBeforeOpen</strong>(targetElement, network, paramsObj). Change <code>paramsObj.networkUrl</code> parameter, to change popup url.
+            <br>
+            <strong>onOpen</strong>(targetElement, network, popupWindow).
+            <br>
+            <strong>onClose</strong>(targetElement, network, popupWindow).
+        </p>
+        <p>For example:</p>
+    <pre class="prettyprint lang-js">&lt;script type="text/javascript"&gt;
+SocialShareKit.init({
+    onBeforeOpen: function(targetElement, network, paramsObj){
+        console.log(arguments);
+    },
+    onOpen: function(targetElement, network, url, popupWindow){
+        console.log(arguments);
+    },
+    onClose: function(targetElement, network, url, popupWindow){
+        console.log(arguments);
+    }
+});
+&lt;/script&gt;</pre>
+        <h3 about="page-header">Twitter callbacks</h3>
+        <p>Twitter lets you to define callbacks once user clicks/tweets content in popup.
+            <strong>Unfortunately</strong>, the unfriendly to developers provider - Twitter recently
+            <a href="https://twittercommunity.com/t/forthcoming-change-to-web-intent-events/54718">changed widget behaviour</a> and now click/tweet events are fired once modal is being open, instead of actual tweet. To enable Twitter callbacks you must follow
+            <a href="https://dev.twitter.com/web/javascript/events" target="_blank">Twitter Docs</a>.
+        <ol>
+            <li>Load/include Twitter widgets file to your page</li>
+            <li>Bind to specific events</li>
+            <li>Add following URL to twitter link <code>href</code> attribute
+                <code>https://twitter.com/intent/tweet</code></li>
+        </ol>
+        <pre class="prettyprint">&lt;a href="https://twitter.com/intent/tweet" class="ssk ssk-twitter"&gt;&lt;/a&gt;</pre>
+
+        Click on following link to see Twitter events below the icon.
+        Test here:
+        <a href="https://twitter.com/intent/tweet" rel="nofollow" class="ssk ssk-twitter"></a>
+        <pre id="twitterEvents"></pre>
+    </div>
     <div class="content-block">
         <a name="license" class="anchor">
             <h2 id="license" class="page-header">License</h2>
@@ -991,13 +1021,23 @@ SocialShareKit.init({
 <script src="../dist/js/social-share-kit.js?v=1.0.7"></script>
 
 
-<script>
+<script type="text/javascript">
+
     // Init Social Share Kit
     SocialShareKit.init({
-        'url': 'http://socialsharekit.com',
-        'twitter': {
-            'title': 'Social Share Kit',
-            'via': 'socialsharekit'
+        url: 'http://socialsharekit.com',
+        twitter: {
+            title: 'Social Share Kit',
+            via: 'socialsharekit'
+        },
+        onBeforeOpen: function(targetElement, network, paramsObj){
+            console.log(arguments);
+        },
+        onOpen: function(targetElement, network, url, popupWindow){
+            console.log(arguments);
+        },
+        onClose: function(targetElement, network, url, popupWindow){
+            console.log(arguments);
         }
     });
 
@@ -1030,6 +1070,35 @@ SocialShareKit.init({
             $link.parent().find('.active').removeClass('active');
             $link.addClass('active').blur();
         });
+    });
+
+    // This code is required if you want to use Twitter callbacks
+    window.twttr = (function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0],
+                t = window.twttr || {};
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "https://platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js, fjs);
+
+        t._e = [];
+        t.ready = function (f) {
+            t._e.push(f);
+        };
+
+        return t;
+    }(document, "script", "twitter-wjs"));
+
+    // Demo callback
+    function twitterDemoCallback(e) {
+        $('#twitterEvents').append(e.type + ' ');
+    }
+
+    // Bind to Twitter events
+    twttr.ready(function (tw) {
+        tw.events.bind('click', twitterDemoCallback);
+        tw.events.bind('tweet', twitterDemoCallback);
     });
 
 
