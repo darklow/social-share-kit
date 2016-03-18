@@ -779,9 +779,9 @@ SocialShareKit.init({
         <p>
             <strong>onBeforeOpen</strong>(targetElement, network, paramsObj). Change <code>paramsObj.networkUrl</code> parameter, to change popup url.
             <br>
-            <strong>onOpen</strong>(targetElement, network, popupWindow).
+            <strong>onOpen</strong>(targetElement, network, networkUrl, popupWindow).
             <br>
-            <strong>onClose</strong>(targetElement, network, popupWindow).
+            <strong>onClose</strong>(targetElement, network, networkUrl, popupWindow).
         </p>
         <p>For example:</p>
     <pre class="prettyprint lang-js">&lt;script type="text/javascript"&gt;
@@ -789,10 +789,10 @@ SocialShareKit.init({
     onBeforeOpen: function(targetElement, network, paramsObj){
         console.log(arguments);
     },
-    onOpen: function(targetElement, network, url, popupWindow){
+    onOpen: function(targetElement, network, networkUrl, popupWindow){
         console.log(arguments);
     },
-    onClose: function(targetElement, network, url, popupWindow){
+    onClose: function(targetElement, network, networkUrl, popupWindow){
         console.log(arguments);
     }
 });
