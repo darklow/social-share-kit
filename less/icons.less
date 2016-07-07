@@ -126,28 +126,30 @@
         .transition(padding 0.1s ease-out);
         margin: 0;
     }
-    &.ssk-left, &.ssk-right {
-        .ssk {
-            display: block;
-            clear: both;
+    @media (min-width: @screen-sm-min) {
+        &.ssk-left, &.ssk-right {
+            .ssk {
+                display: block;
+                clear: both;
+            }
+            &.ssk-center {
+                top: 50%;
+                .transform(translateY(-50%));
+            }
         }
-        &.ssk-center {
-            top: 50%;
-            .transform(translateY(-50%));
+        &.ssk-left {
+            left: 0;
+            .ssk {
+                float: left;
+                &:hover { padding-left: @sticky-hover-padding; }
+            }
         }
-    }
-    &.ssk-left {
-        left: 0;
-        .ssk {
-            float: left;
-            &:hover { padding-left: @sticky-hover-padding; }
-        }
-    }
-    &.ssk-right {
-        right: 0;
-        .ssk {
-            float: right;
-            &:hover { padding-right: @sticky-hover-padding; }
+        &.ssk-right {
+            right: 0;
+            .ssk {
+                float: right;
+                &:hover { padding-right: @sticky-hover-padding; }
+            }
         }
     }
     &.ssk-bottom {
@@ -179,7 +181,30 @@
         }
     }
     @media (max-width: @screen-xs-max) {
-        display: none;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: auto;
+        width: 100%;
+        display: flex !important;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        &.ssk-sticky-hide-xs {
+            display: none !important;
+        }
+        .ssk {
+            flex: 1;
+            width: auto;
+            .ssk-num {
+                display: none;
+            }
+            /*.ssk-num {
+                width: 100%;
+                display: block;
+                background-color: fadeout(#fff, 10%);
+                border-radius: 0;
+            }*/
+        }
     }
 }
 .ssk-count {
@@ -201,25 +226,26 @@
         top: -20px;
     }
     &.ssk-sticky {
-        padding-top: 0;
-
-        &.ssk-left, &.ssk-right {
-            .ssk-num {
-                top: 20%;
-                background-color: transparent;
+        @media (min-width: @screen-sm-min) {
+            padding-top: 0;
+            &.ssk-left, &.ssk-right {
+                .ssk-num {
+                    top: 20%;
+                    background-color: transparent;
+                }
             }
-        }
-        &.ssk-left {
-            .ssk-num {
-                left: 100%;
-                margin-left: 5px;
+            &.ssk-left {
+                .ssk-num {
+                    left: 100%;
+                    margin-left: 5px;
+                }
             }
-        }
-        &.ssk-right {
-            .ssk-num {
-                right: 115%;
-                margin-left: -100%;
-                text-align: right;
+            &.ssk-right {
+                .ssk-num {
+                    right: 115%;
+                    margin-left: -100%;
+                    text-align: right;
+                }
             }
         }
     }

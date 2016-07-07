@@ -9,7 +9,9 @@
 .handle-bootstrap-vars(){
     @gray: #757575;
     @gray-dark: darken(@gray, 20%);
-    @screen-xs-max: 767px;
+    @screen-sm: 768px;
+    @screen-sm-min: @screen-sm;
+    @screen-xs-max: (@screen-sm-min - 1);
 }
 .handle-bootstrap-vars();
 
