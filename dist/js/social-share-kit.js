@@ -305,7 +305,7 @@ var SocialShareKit = (function () {
             case 'facebook':
                 url = 'https://graph.facebook.com/?id=' + shareUrlEnc;
                 parseFunc = function (r) {
-                    return onReady(r.shares ? r.shares : 0);
+                    return onReady(r.share ? r.share.share_count : 0);
                 };
                 break;
             case 'twitter':
