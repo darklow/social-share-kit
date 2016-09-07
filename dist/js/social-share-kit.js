@@ -1,7 +1,7 @@
 /*!
  * Social Share Kit v1.0.9 (http://socialsharekit.com)
  * Copyright 2015 Social Share Kit / Kaspars Sprogis.
- * Licensed under Creative Commons Attribution-NonCommercial 3.0 license:
+ * @Licensed under Creative Commons Attribution-NonCommercial 3.0 license:
  * https://github.com/darklow/social-share-kit/blob/master/LICENSE
  * ---
  */
