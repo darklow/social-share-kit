@@ -1,6 +1,6 @@
 {
 	"name": "social-share-kit",
-	"version": "1.0.9",
+	"version": "1.0.10",
 	"description": "Library of decent and good looking CSS/JavaScript social sharing icons, buttons and popups",
 	"main": "dist/js/social-share-kit.min.js",
 	"repository": {
