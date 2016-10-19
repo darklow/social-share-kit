@@ -33,7 +33,11 @@ var SocialShareKit = (function () {
                     if (!network) {
                         return;
                     }
-                    removeEventListener(el, 'click', onClick);
+
+                    if(el.getAttribute('data-ssk-ready'))
+                        return;
+
+                    el.setAttribute('data-ssk-ready', true);
                     addEventListener(el, 'click', onClick);
 
                     // Gather icons with share counts
@@ -145,13 +149,6 @@ var SocialShareKit = (function () {
                 handler.call(el);
             });
         }
-    }
-
-    function removeEventListener(el, eventName, handler) {
-        if (el.removeEventListener)
-            el.removeEventListener(eventName, handler);
-        else
-            el.detachEvent('on' + eventName, handler);
     }
 
     function elSupportsShare(el) {
