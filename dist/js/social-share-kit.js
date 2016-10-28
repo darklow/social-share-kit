@@ -283,6 +283,9 @@ var SocialShareKit = (function () {
             if (typeof optValue != 'undefined') {
                 opts[optKey] = optValue;
             }
+            else{
+                opts[optKey] = "";
+            }
         }
         return opts;
     }
