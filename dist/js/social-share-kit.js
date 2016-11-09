@@ -199,7 +199,7 @@ var SocialShareKit = (function () {
             };
         switch (network) {
             case 'facebook':
-                url = 'https://www.facebook.com/share.php?u=' + paramsObj.shareUrlEncoded();
+                url = 'https://www.facebook.com/share.php?u=' + paramsObj.shareUrlEncoded() + (!!paramsObj.text ? '&quote=' + encodeURIComponent(paramsObj.text.replace(/\n/g, ' ... ')) : '');
                 break;
             case 'twitter':
                 url = 'https://twitter.com/intent/tweet?url=' + paramsObj.shareUrlEncoded() +
@@ -230,8 +230,12 @@ var SocialShareKit = (function () {
                 url = 'https://vkontakte.ru/share.php?url=' + paramsObj.shareUrlEncoded();
                 break;
             case 'email':
-                url = 'mailto:?subject=' + encodeURIComponent(title) +
-                    '&body=' + encodeURIComponent( shareUrl + '\n\n' + text + '\n');
+                url = 'mailto:?subject=' + encodeURIComponent(title?title:document.title) +
+                    '&body=' + encodeURIComponent(
+                        (!!title ? title + '\n' : '') + 
+                        (!!shareUrl ? shareUrl + '\n\n' : '') + 
+                        (!!text ? text + '\n' : '')
+                    );
                 break;
         }
 
@@ -246,6 +250,7 @@ var SocialShareKit = (function () {
 
     function getShareUrl(options, network, el, dataOpts) {
         dataOpts = dataOpts || getDataOpts(options, network, el);
+        if (dataOpts['url'] === '') { return ''; }
         return dataOpts['url'] || window.location.href;
     }
 
