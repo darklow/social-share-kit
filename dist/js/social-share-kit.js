@@ -231,7 +231,7 @@ var SocialShareKit = (function () {
                 break;
             case 'email':
                 url = 'mailto:?subject=' + encodeURIComponent(title) +
-                    '&body=' + encodeURIComponent(title + '\n' + shareUrl + '\n\n' + text + '\n');
+                    '&body=' + encodeURIComponent( shareUrl + '\n\n' + text + '\n');
                 break;
         }
 
