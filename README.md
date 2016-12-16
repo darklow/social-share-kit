@@ -1,4 +1,5 @@
 # [Social Share Kit](http://socialsharekit.com)
+[![CDNJS](https://img.shields.io/cdnjs/v/social-share-kit.svg)](https://cdnjs.com/libraries/social-share-kit)
 
 Social Share Kit is a library of decent and good looking CSS/JavaScript social sharing icons, buttons and popups.
 
