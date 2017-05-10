@@ -1,5 +1,5 @@
 /*!
- * Social Share Kit v1.0.13 (http://socialsharekit.com)
+ * Social Share Kit v1.0.14 (http://socialsharekit.com)
  * Copyright 2015 Social Share Kit / Kaspars Sprogis.
  * @Licensed under Creative Commons Attribution-NonCommercial 3.0 license:
  * https://github.com/darklow/social-share-kit/blob/master/LICENSE
@@ -24,7 +24,7 @@ var SocialShareKit = (function () {
                 options = this.options,
                 urlsToCount = {};
 
-            ready(function () {
+            var _init = function () {
                 if (!els.length)
                     return;
 
@@ -34,7 +34,7 @@ var SocialShareKit = (function () {
                         return;
                     }
 
-                    if(el.getAttribute('data-ssk-ready'))
+                    if (el.getAttribute('data-ssk-ready'))
                         return;
 
                     el.setAttribute('data-ssk-ready', true);
@@ -52,7 +52,13 @@ var SocialShareKit = (function () {
                 });
 
                 processShareCount();
-            });
+            };
+
+            if (options.forceInit === true)
+                _init();
+            else
+                ready(_init);
+       
 
             function onClick(e) {
                 var target = preventDefault(e),
