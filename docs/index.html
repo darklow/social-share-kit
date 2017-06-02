@@ -682,6 +682,12 @@
 SocialShareKit.init();
 &lt;/script&gt;</pre>
 
+        In case if you want to initialize right away without waiting for DOM to load, use <code>forceInit: true</code>:
+        <pre class="prettyprint">&lt;script type="text/javascript"&gt;
+SocialShareKit.init({ forceInit: true });
+&lt;/script&gt;</pre>
+
+        Social Share Kit is keeping track of already initialised items, so in case if your DOM changes, you can call <code>SocialShareKit.init()</code> multiple times.
 
         <h3 about="page-header">Sharer popup options</h3>
 
