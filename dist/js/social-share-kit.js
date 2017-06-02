@@ -1,12 +1,12 @@
 /*!
- * Social Share Kit v1.0.14 (http://socialsharekit.com)
+ * Social Share Kit v1.0.13 (http://socialsharekit.com)
  * Copyright 2015 Social Share Kit / Kaspars Sprogis.
  * @Licensed under Creative Commons Attribution-NonCommercial 3.0 license:
  * https://github.com/darklow/social-share-kit/blob/master/LICENSE
  * ---
  */
 var SocialShareKit = (function () {
-    var supportsShare = /(twitter|facebook|google-plus|pinterest|tumblr|vk|linkedin|email)/,
+    var supportsShare = /(twitter|facebook|google-plus|pinterest|tumblr|vk|linkedin|buffer|email)/,
         sep = '*|*', wrap, _wrap;
 
     // Wrapper to support multiple instances per page by selector
@@ -58,7 +58,7 @@ var SocialShareKit = (function () {
                 _init();
             else
                 ready(_init);
-       
+
 
             function onClick(e) {
                 var target = preventDefault(e),
@@ -79,8 +79,16 @@ var SocialShareKit = (function () {
                     return;
                 }
 
-                if (network != 'email') {
-                    var win = winOpen(url);
+                if (network !== 'email') {
+                    var width, height;
+                    if (network === 'buffer') {
+                        width = 800;
+                        height = 680;
+                    } else {
+                        width = 575;
+                        height = 400;
+                    }
+                    var win = winOpen(url, width, height);
 
                     if (options.onOpen) {
                         options.onOpen(target, network, url, win);
@@ -173,14 +181,18 @@ var SocialShareKit = (function () {
         return evt.currentTarget || evt.srcElement;
     }
 
-    function winOpen(url) {
-        var width = 575, height = 400,
-            left = (document.documentElement.clientWidth / 2 - width / 2),
-            top = (document.documentElement.clientHeight - height) / 2,
+    function winOpen(url, width, height) {
+        var win, left, top, opts;
+        if (width && height) {
+            left = (document.documentElement.clientWidth / 2 - width / 2);
+            top = (document.documentElement.clientHeight - height) / 2;
             opts = 'status=1,resizable=yes' +
                 ',width=' + width + ',height=' + height +
-                ',top=' + top + ',left=' + left,
+                ',top=' + top + ',left=' + left;
             win = window.open(url, '', opts);
+        } else {
+            win = window.open(url);
+        }
         win.focus();
         return win;
     }
@@ -235,6 +247,10 @@ var SocialShareKit = (function () {
             case 'vk':
                 url = 'https://vkontakte.ru/share.php?url=' + paramsObj.shareUrlEncoded();
                 break;
+            case 'buffer':
+                url = 'https://buffer.com/add?source=button&url=' + paramsObj.shareUrlEncoded() +
+                    '&text=' + encodeURIComponent(text);
+                break;
             case 'email':
                 url = 'mailto:?subject=' + encodeURIComponent(title) +
                     '&body=' + encodeURIComponent(title + '\n' + shareUrl + '\n\n' + text + '\n');
@@ -270,7 +286,8 @@ var SocialShareKit = (function () {
     }
 
     function getMetaContent(tagName, attr) {
-        var text, tag = $('meta[' + (attr ? attr : tagName.indexOf('og:') === 0 ? 'property' : 'name') + '="' + tagName + '"]');
+        var text,
+            tag = $('meta[' + (attr ? attr : tagName.indexOf('og:') === 0 ? 'property' : 'name') + '="' + tagName + '"]');
         if (tag.length) {
             text = tag[0].getAttribute('content') || '';
         }
@@ -345,6 +362,12 @@ var SocialShareKit = (function () {
                 url = 'https://vk.com/share.php?act=count&url=' + shareUrlEnc;
                 parseFunc = function (r) {
                     return onReady(r);
+                };
+                break;
+            case 'buffer':
+                url = 'https://api.bufferapp.com/1/links/shares.json?url=' + shareUrlEnc;
+                parseFunc = function (r) {
+                    return onReady(r.shares);
                 };
                 break;
         }
