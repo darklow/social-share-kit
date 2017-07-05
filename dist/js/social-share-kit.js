@@ -52,7 +52,6 @@ var SocialShareKit = (function () {
                 });
 
                 processShareCount();
-
             };
 
             if (options.forceInit === true)
@@ -183,7 +182,6 @@ var SocialShareKit = (function () {
     }
 
     function winOpen(url, width, height) {
-
         var win, left, top, opts;
         if (width && height) {
             left = (document.documentElement.clientWidth / 2 - width / 2);
@@ -291,7 +289,6 @@ var SocialShareKit = (function () {
     }
 
     function getMetaContent(tagName, attr) {
-
         var text,
             tag = $('meta[' + (attr ? attr : tagName.indexOf('og:') === 0 ? 'property' : 'name') + '="' + tagName + '"]');
         if (tag.length) {
