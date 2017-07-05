@@ -1,12 +1,12 @@
 /*!
- * Social Share Kit v1.0.14 (http://socialsharekit.com)
+ * Social Share Kit v1.0.15 (http://socialsharekit.com)
  * Copyright 2015 Social Share Kit / Kaspars Sprogis.
  * @Licensed under Creative Commons Attribution-NonCommercial 3.0 license:
  * https://github.com/darklow/social-share-kit/blob/master/LICENSE
  * ---
  */
 var SocialShareKit = (function () {
-    var supportsShare = /(twitter|facebook|google-plus|pinterest|tumblr|vk|linkedin|buffer|email)/,
+    var supportsShare = /(twitter|facebook|google-plus|pinterest|tumblr|vk|linkedin|whatsapp|buffer|email)/,
         sep = '*|*', wrap, _wrap;
 
     // Wrapper to support multiple instances per page by selector
@@ -52,6 +52,7 @@ var SocialShareKit = (function () {
                 });
 
                 processShareCount();
+
             };
 
             if (options.forceInit === true)
@@ -182,6 +183,7 @@ var SocialShareKit = (function () {
     }
 
     function winOpen(url, width, height) {
+
         var win, left, top, opts;
         if (width && height) {
             left = (document.documentElement.clientWidth / 2 - width / 2);
@@ -216,6 +218,9 @@ var SocialShareKit = (function () {
                 }
             };
         switch (network) {
+            case 'whatsapp':
+                url = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(title + '\n' + shareUrl + '\n\n' + text + '\n');
+                break;
             case 'facebook':
                 url = 'https://www.facebook.com/share.php?u=' + paramsObj.shareUrlEncoded();
                 break;
@@ -286,6 +291,7 @@ var SocialShareKit = (function () {
     }
 
     function getMetaContent(tagName, attr) {
+
         var text,
             tag = $('meta[' + (attr ? attr : tagName.indexOf('og:') === 0 ? 'property' : 'name') + '="' + tagName + '"]');
         if (tag.length) {
