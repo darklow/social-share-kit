@@ -1,0 +1,50 @@
+// Variables
+$ssk-font-path:        "/static/node_modules/social-share-kit/dist/fonts/" !default;
+//Font Awesome 4 compatibility
+$fa-css-prefix:        fa;
+//Glyphicons compatibility
+$glyphicon-css-prefix: glyphicon;
+
+// Set LESS Bootstrap variables only if needed
+$gray: #757575;
+$gray-dark: darken($gray, 20%);
+$screen-sm: 768px;
+$screen-sm-min: $screen-sm;
+$screen-xs-max: ($screen-sm-min - 1);
+
+// Social colors
+$social-colors: (
+    facebook: #3B5998,
+    twitter: #1DA1F2,
+    google-plus: #EA4335,
+    pinterest: #BD081C,
+    tumblr: #395773,
+    email: $gray,
+    vk: #54769a,
+    linkedin: #1c87bd,
+    whatsapp: #34AF23,
+    reddit: #5f99cf,
+    reddit2: #5f99cf,
+    buffer: #323B43,
+
+    // Extra colors (See: http://flatuicolors.com/)
+    emerald: #2ecc71,
+    peter-river: #3498db,
+    belize-hole: #2980b9,
+    amethyst: #9b59b6,
+    wisteria: #8e44ad,
+    wet-asphalt: #34495e,
+    midnight-blue: #2c3e50,
+    green-sea: #16a085,
+    nephritis: #27ae60,
+    sunflower: #f1c40f,
+    carrot: #e67e22,
+    alizarin: #e74c3c,
+    pumpkin: #d35400,
+    pomegranate: #c0392b,
+    clouds: darken(#ecf0f1, 10),
+    concrete: #95a5a6,
+    asbestos: #7f8c8d,
+    dark-gray: #555,
+    black: #333
+)
