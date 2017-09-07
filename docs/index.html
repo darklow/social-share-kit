@@ -415,6 +415,7 @@
                 <a href="" class="ssk ssk-icon ssk-reddit2" title="Reddit2"></a>
                 <a href="" class="ssk ssk-buffer" title="Buffer"></a>
                 <a href="" class="ssk ssk-icon ssk-buffer" title="Buffer"></a>
+                <a href="" class="ssk ssk-icon ssk-slack" title="Slack"></a>
             </div>
             <div>
                 <h3 class="page-header">Floating/sticky bar</h3>
@@ -693,7 +694,11 @@ SocialShareKit.init();
 SocialShareKit.init({ forceInit: true });
 &lt;/script&gt;</pre>
 
-        Social Share Kit is keeping track of already initialised items, so in case if your DOM changes, you can call <code>SocialShareKit.init()</code> multiple times.
+        Social Share Kit is keeping track of already initialised items, so in case if your DOM changes, you can call <code>SocialShareKit.init()</code> multiple times. If you would like reinitialize SSK once again to the same DOM elements using other parameters use <code>reinitialize: true</code>:
+
+        <pre class="prettyprint">&lt;script type="text/javascript"&gt;
+SocialShareKit.init({ reinitialize: true });
+&lt;/script&gt;</pre>
 
         <h3 about="page-header">Sharer popup options</h3>
 
@@ -1043,6 +1048,23 @@ SocialShareKit.init({
         url: 'http://socialsharekit.com',
         twitter: {
             title: 'Social Share Kit',
+            via: 'socialsharekit'
+        },
+        onBeforeOpen: function(targetElement, network, paramsObj){
+            console.log(arguments);
+        },
+        onOpen: function(targetElement, network, url, popupWindow){
+            console.log(arguments);
+        },
+        onClose: function(targetElement, network, url, popupWindow){
+            console.log(arguments);
+        }
+    });
+    SocialShareKit.init({
+        reinitialize: true,
+        url: 'http://socialsharekit.com',
+        twitter: {
+            title: 'Social Share Kit 222222',
             via: 'socialsharekit'
         },
         onBeforeOpen: function(targetElement, network, paramsObj){
