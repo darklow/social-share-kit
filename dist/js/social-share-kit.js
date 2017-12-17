@@ -305,6 +305,11 @@ var SocialShareKit = (function () {
         return text || ''
     }
 
+    // Source: https://stackoverflow.com/questions/3431512/javascript-equivalent-to-phps-urldecode
+    function urlDecode(url) {
+        return decodeURIComponent(url.replace(/\+/g, ' '));
+    }
+
     function getDataOpts(options, network, el) {
         var validOpts = ['url', 'title', 'text', 'image'],
             opts = {}, optValue, optKey, dataKey, a, parent = el.parentNode;
@@ -315,7 +320,10 @@ var SocialShareKit = (function () {
             optValue = el.getAttribute(dataKey) || parent.getAttribute(dataKey) ||
                 (options[network] && typeof options[network][optKey] != 'undefined' ? options[network][optKey] : options[optKey]);
             if (typeof optValue != 'undefined') {
-                opts[optKey] = optValue;
+                if (options.decode)
+                    opts[optKey] = urlDecode(optValue);
+                else
+                    opts[optKey] = optValue;
             }
         }
         return opts;
