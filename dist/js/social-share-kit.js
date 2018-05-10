@@ -258,6 +258,10 @@ var SocialShareKit = (function () {
             case 'vk':
                 url = 'https://vkontakte.ru/share.php?url=' + paramsObj.shareUrlEncoded();
                 break;
+            case 'weibo':
+                url = 'http://service.weibo.com/share/share.php?url=' + paramsObj.shareUrlEncoded() +
+                    '&title=' + encodeURIComponent(title);
+                break;
             case 'buffer':
                 url = 'https://buffer.com/add?source=button&url=' + paramsObj.shareUrlEncoded() +
                     '&text=' + encodeURIComponent(text);
