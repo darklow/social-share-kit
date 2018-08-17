@@ -14,6 +14,7 @@ var SocialShareKit = (function () {
         var options = opts || {},
             selector = options.selector || '.ssk';
         this.nodes = $(selector);
+        this.selects = $(selector + '-select');
         this.options = options;
     };
 
@@ -22,7 +23,8 @@ var SocialShareKit = (function () {
         share: function () {
             var els = this.nodes,
                 options = this.options,
-                urlsToCount = {};
+                urlsToCount = {},
+                selects = this.selects;
 
             var _init = function () {
                 if (!els.length)
@@ -44,6 +46,8 @@ var SocialShareKit = (function () {
                     addEventListener(el, 'click', onClick);
                     el._skkListener = onClick
 
+                    
+
                     // Gather icons with share counts
                     if (el.parentNode.className.indexOf('ssk-count') !== -1) {
                         network = network[0];
@@ -58,10 +62,31 @@ var SocialShareKit = (function () {
                 processShareCount();
             };
 
+            var _select = function () {
+                each(selects, function (el) {
+                    var selection = window.getSelection();
+                    var strSelection = selection.toString();
+                    if (strSelection === '') {
+                        el.style.display = 'none';
+                        return;
+                    }
+                    el.setAttribute('data-text', strSelection);
+                    var range = selection.getRangeAt(0);
+                    var rects = Array.from(range.getClientRects());
+                    var total = rects.length;
+                    var center = rects.map(rect => rect.left + rect.width / 2).reduce((middle, avg) => avg + middle) / total;
+                    var top = Math.min.apply(Math, rects.map(rect => rect.top));
+                    el.style.display = 'block';
+                    var size = el.getBoundingClientRect();
+                    el.style.left = (center - size.width / 2) + 'px';
+                    el.style.top = (top - size.height + window.pageYOffset) + 'px';
+                });
+            };
+
             if (options.forceInit === true)
                 _init();
             else
-                ready(_init);
+                ready(_init, _select);
 
 
             function onClick(e) {
@@ -137,17 +162,19 @@ var SocialShareKit = (function () {
         return wrap(opts).share();
     }
 
-    function ready(fn) {
+    function ready(fn, select) {
         if (document.readyState != 'loading') {
             fn();
         } else if (document.addEventListener) {
             document.addEventListener('DOMContentLoaded', fn);
+            
         } else {
             document.attachEvent('onreadystatechange', function () {
                 if (document.readyState != 'loading')
                     fn();
             });
         }
+        addEventListener(window, 'mouseup', select);
     }
 
     function $(selector) {
