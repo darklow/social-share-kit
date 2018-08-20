@@ -70,7 +70,7 @@ var SocialShareKit = (function () {
                 var selection = window.getSelection();
                 var strSelection = selection.toString();
                 var range = selection.getRangeAt(0);
-                var rects = Array.from(range.getClientRects());
+                var rects = Array.prototype.slice.call(range.getClientRects());
                 var total = rects.length;
                 each(selects, function (el) {
                     var target = getSelectTarget(options, undefined, el);
