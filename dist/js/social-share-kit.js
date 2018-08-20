@@ -84,23 +84,22 @@ var SocialShareKit = (function () {
                     var top, left;
                     switch(getSelectPosition(options, undefined, el)) {
                         case 'center':
-                            var min = Math.min.apply(Math, rects.map(function(rect){ rect.top }));
-                            var center = rects.map(function(rect){ rect.left + rect.width / 2 }).reduce(function(middle, avg){ avg + middle }) / total;
+                            var min = Math.min.apply(Math, rects.map(function(rect){ return rect.top; }));
+                            var center = rects.map(function(rect){ return rect.left + rect.width / 2; }).reduce(function(middle, avg){ return avg + middle; }) / total;
                             left = (center - size.width / 2);
                             top = (min - size.height + window.pageYOffset);
                             break;
                         case 'left':
-                            var min = Math.min.apply(Math, rects.map(function(rect){ rect.top }));
+                            var min = Math.min.apply(Math, rects.map(function(rect){ return rect.top; }));
                             top = (min - size.height + window.pageYOffset);
-                            left = Math.min.apply(Math, rects.map(function(rect){ rect.left }));
+                            left = Math.min.apply(Math, rects.map(function(rect){ return rect.left; }));
                             break;
                         case 'right':
-                            var min = Math.min.apply(Math, rects.map(function(rect){ rect.top }));
+                            var min = Math.min.apply(Math, rects.map(function(rect){ return rect.top; }));
                             top = (min - size.height + window.pageYOffset);
-                            left = Math.max.apply(Math, rects.map(function(rect){ rect.right })) - size.width;
+                            left = Math.max.apply(Math, rects.map(function(rect){ return rect.right; })) - size.width;
                             break;
                     }
-                    
                     el.style.top = top + 'px';
                     el.style.left = left + 'px';
                 });
@@ -197,7 +196,7 @@ var SocialShareKit = (function () {
                     fn();
             });
         }
-        addEventListener(window, 'mouseup', select);
+        addEventListener(document, 'mouseup', select);
     }
 
     function $(selector) {
