@@ -30,6 +30,10 @@ var SocialShareKit = (function () {
                 if (!els.length)
                     return;
 
+                if (!Element.prototype.matches) {
+                    Element.prototype.matches = Element.prototype.msMatchesSelector;
+                }
+
                 each(els, function (el) {
                     var network = elSupportsShare(el), uniqueKey;
                     if (!network) {
@@ -53,8 +57,8 @@ var SocialShareKit = (function () {
                         network = network[0];
                         uniqueKey = network + sep + getShareUrl(options, network, el);
                         if (!(uniqueKey in urlsToCount)) {
-                            urlsToCount[uniqueKey] = [];
-                        }
+                            urlsToCount[uniqueKey] = [];    
+                        }       
                         urlsToCount[uniqueKey].push(el);
                     }
                 });
@@ -62,24 +66,43 @@ var SocialShareKit = (function () {
                 processShareCount();
             };
 
-            var _select = function () {
+            var _select = function (e) {
+                var selection = window.getSelection();
+                var strSelection = selection.toString();
+                var range = selection.getRangeAt(0);
+                var rects = Array.from(range.getClientRects());
+                var total = rects.length;
                 each(selects, function (el) {
-                    var selection = window.getSelection();
-                    var strSelection = selection.toString();
-                    if (strSelection === '') {
+                    var target = getSelectTarget(options, undefined, el);
+                    if (strSelection === '' || !e.target.matches(target)) {
                         el.style.display = 'none';
                         return;
                     }
                     el.setAttribute('data-text', strSelection);
-                    var range = selection.getRangeAt(0);
-                    var rects = Array.from(range.getClientRects());
-                    var total = rects.length;
-                    var center = rects.map(rect => rect.left + rect.width / 2).reduce((middle, avg) => avg + middle) / total;
-                    var top = Math.min.apply(Math, rects.map(rect => rect.top));
                     el.style.display = 'block';
                     var size = el.getBoundingClientRect();
-                    el.style.left = (center - size.width / 2) + 'px';
-                    el.style.top = (top - size.height + window.pageYOffset) + 'px';
+                    var top, left;
+                    switch(getSelectPosition(options, undefined, el)) {
+                        case 'center':
+                            var min = Math.min.apply(Math, rects.map(rect => rect.top));
+                            var center = rects.map(rect => rect.left + rect.width / 2).reduce((middle, avg) => avg + middle) / total;
+                            left = (center - size.width / 2);
+                            top = (min - size.height + window.pageYOffset);
+                            break;
+                        case 'left':
+                            var min = Math.min.apply(Math, rects.map(rect => rect.top));
+                            top = (min - size.height + window.pageYOffset);
+                            left = Math.min.apply(Math, rects.map(rect => rect.left));
+                            break;
+                        case 'right':
+                            var min = Math.min.apply(Math, rects.map(rect => rect.top));
+                            top = (min - size.height + window.pageYOffset);
+                            left = Math.max.apply(Math, rects.map(rect => rect.right)) - size.width;
+                            break;
+                    }
+                    
+                    el.style.top = top + 'px';
+                    el.style.left = left + 'px';
                 });
             };
 
@@ -235,6 +258,28 @@ var SocialShareKit = (function () {
         return win;
     }
 
+    function includes(array, item) {
+        for (var i = 0, len = array.length; i < len; i++ ) {
+            if (array[i] === item) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function getSelectPosition(options, network, el) {
+        const validPositions = ['center', 'left', 'right'];
+        var dataOpts = getDataOpts(options, network, el),
+        position = typeof dataOpts['position'] !== 'undefined' && includes(validPositions, dataOpts['position']) ? dataOpts['position'] : 'center';
+        return position;
+    }
+
+    function getSelectTarget(options, network, el) {
+        var dataOpts = getDataOpts(options, network, el),
+        target = typeof dataOpts['target'] !== 'undefined' ? dataOpts['target'] : '*';
+        return target;
+    }
+
     function getUrl(options, network, el) {
         var url, dataOpts = getDataOpts(options, network, el),
             shareUrl = getShareUrl(options, network, el, dataOpts),
@@ -333,7 +378,7 @@ var SocialShareKit = (function () {
     }
 
     function getDataOpts(options, network, el) {
-        var validOpts = ['url', 'title', 'text', 'image'],
+        var validOpts = ['url', 'title', 'text', 'image', 'position', 'target'],
             opts = {}, optValue, optKey, dataKey, a, parent = el.parentNode;
         network == 'twitter' && validOpts.push('via');
         for (a in validOpts) {
