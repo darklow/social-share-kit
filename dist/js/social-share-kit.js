@@ -67,42 +67,48 @@ var SocialShareKit = (function () {
             };
 
             var _select = function (e) {
-                var selection = window.getSelection();
-                var strSelection = selection.toString();
-                var range = selection.getRangeAt(0);
-                var rects = Array.prototype.slice.call(range.getClientRects());
-                var total = rects.length;
-                each(selects, function (el) {
-                    var target = getSelectTarget(options, undefined, el);
-                    if (strSelection === '' || !e.target.matches(target)) {
-                        el.style.display = 'none';
-                        return;
+                if (window.getSelection) {
+                    var selection = window.getSelection();
+                    if (selection && selection.getRangeAt) {
+                        var strSelection = selection.toString();
+                        var range = selection.getRangeAt(0);
+                        if (range.getClientRects) {
+                            var rects = Array.prototype.slice.call(range.getClientRects());
+                            var total = rects.length;
+                            each(selects, function (el) {
+                                var target = getSelectTarget(options, undefined, el);
+                                if (strSelection === '' || !e.target.matches(target)) {
+                                    el.style.display = 'none';
+                                    return;
+                                }
+                                el.setAttribute('data-text', strSelection);
+                                el.style.display = 'block';
+                                var size = el.getBoundingClientRect();
+                                var top, left;
+                                switch(getSelectPosition(options, undefined, el)) {
+                                    case 'center':
+                                        var min = Math.min.apply(Math, rects.map(function(rect){ return rect.top; }));
+                                        var center = rects.map(function(rect){ return rect.left + rect.width / 2; }).reduce(function(middle, avg){ return avg + middle; }) / total;
+                                        left = (center - size.width / 2);
+                                        top = (min - size.height + window.pageYOffset);
+                                        break;
+                                    case 'left':
+                                        var min = Math.min.apply(Math, rects.map(function(rect){ return rect.top; }));
+                                        top = (min - size.height + window.pageYOffset);
+                                        left = Math.min.apply(Math, rects.map(function(rect){ return rect.left; }));
+                                        break;
+                                    case 'right':
+                                        var min = Math.min.apply(Math, rects.map(function(rect){ return rect.top; }));
+                                        top = (min - size.height + window.pageYOffset);
+                                        left = Math.max.apply(Math, rects.map(function(rect){ return rect.right; })) - size.width;
+                                        break;
+                                }
+                                el.style.top = top + 'px';
+                                el.style.left = left + 'px';
+                            });
+                        }
                     }
-                    el.setAttribute('data-text', strSelection);
-                    el.style.display = 'block';
-                    var size = el.getBoundingClientRect();
-                    var top, left;
-                    switch(getSelectPosition(options, undefined, el)) {
-                        case 'center':
-                            var min = Math.min.apply(Math, rects.map(function(rect){ return rect.top; }));
-                            var center = rects.map(function(rect){ return rect.left + rect.width / 2; }).reduce(function(middle, avg){ return avg + middle; }) / total;
-                            left = (center - size.width / 2);
-                            top = (min - size.height + window.pageYOffset);
-                            break;
-                        case 'left':
-                            var min = Math.min.apply(Math, rects.map(function(rect){ return rect.top; }));
-                            top = (min - size.height + window.pageYOffset);
-                            left = Math.min.apply(Math, rects.map(function(rect){ return rect.left; }));
-                            break;
-                        case 'right':
-                            var min = Math.min.apply(Math, rects.map(function(rect){ return rect.top; }));
-                            top = (min - size.height + window.pageYOffset);
-                            left = Math.max.apply(Math, rects.map(function(rect){ return rect.right; })) - size.width;
-                            break;
-                    }
-                    el.style.top = top + 'px';
-                    el.style.left = left + 'px';
-                });
+                }
             };
 
             if (options.forceInit === true)
