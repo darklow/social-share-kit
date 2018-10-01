@@ -69,7 +69,7 @@ var SocialShareKit = (function () {
             var _select = function (e) {
                 if (window.getSelection) {
                     var selection = window.getSelection();
-                    if (selection && selection.getRangeAt) {
+                    if (selection && selection.getRangeAt && selection.rangeCount) {
                         var strSelection = selection.toString();
                         var range = selection.getRangeAt(0);
                         if (range.getClientRects) {
