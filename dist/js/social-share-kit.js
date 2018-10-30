@@ -312,8 +312,15 @@ var SocialShareKit = (function () {
         for (a in validOpts) {
             optKey = validOpts[a];
             dataKey = 'data-' + optKey;
-            optValue = el.getAttribute(dataKey) || parent.getAttribute(dataKey) ||
-                (options[network] && typeof options[network][optKey] != 'undefined' ? options[network][optKey] : options[optKey]);
+            var fromEl = el.getAttribute(dataKey);
+            optValue = typeof fromEl != 'undefined' && fromEl;
+            if (typeof optValue == 'undefined') {
+                var fromParent = parent.getAttribute(dataKey);
+                optValue = fromParent != 'undefined' && fromParent;
+            }
+            if (typeof optValue == 'undefined') {
+                optValue = (options[network] && typeof options[network][optKey] != 'undefined' ? options[network][optKey] : options[optKey]);
+            }   
             if (typeof optValue != 'undefined') {
                 opts[optKey] = optValue;
             }
