@@ -317,10 +317,10 @@ var SocialShareKit = (function () {
             optKey = validOpts[a];
             dataKey = 'data-' + optKey;
             var fromEl = el.getAttribute(dataKey);
-            optValue = typeof fromEl != 'undefined' && fromEl;
+            optValue = truthyOrEmpty(fromEl) && fromEl;
             if (!truthyOrEmpty(optValue)) {
                 var fromParent = parent.getAttribute(dataKey);
-                optValue = fromParent != 'undefined' && fromParent;
+                optValue = truthyOrEmpty(fromParent) && fromParent;
             }
             if (!truthyOrEmpty(optValue)) {
                 optValue = (options[network] && typeof options[network][optKey] != 'undefined' ? options[network][optKey] : options[optKey]);
