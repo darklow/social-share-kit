@@ -305,6 +305,10 @@ var SocialShareKit = (function () {
         return text || ''
     }
 
+    function truthyOrEmpty(value) {
+        return value || value === '';
+    }
+
     function getDataOpts(options, network, el) {
         var validOpts = ['url', 'title', 'text', 'image'],
             opts = {}, optValue, optKey, dataKey, a, parent = el.parentNode;
@@ -312,8 +316,15 @@ var SocialShareKit = (function () {
         for (a in validOpts) {
             optKey = validOpts[a];
             dataKey = 'data-' + optKey;
-            optValue = el.getAttribute(dataKey) || parent.getAttribute(dataKey) ||
-                (options[network] && typeof options[network][optKey] != 'undefined' ? options[network][optKey] : options[optKey]);
+            var fromEl = el.getAttribute(dataKey);
+            optValue = truthyOrEmpty(fromEl) && fromEl;
+            if (!truthyOrEmpty(optValue)) {
+                var fromParent = parent.getAttribute(dataKey);
+                optValue = truthyOrEmpty(fromParent) && fromParent;
+            }
+            if (!truthyOrEmpty(optValue)) {
+                optValue = (options[network] && typeof options[network][optKey] != 'undefined' ? options[network][optKey] : options[optKey]);
+            }   
             if (typeof optValue != 'undefined') {
                 opts[optKey] = optValue;
             }
