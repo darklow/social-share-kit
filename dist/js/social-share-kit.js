@@ -14,6 +14,7 @@ var SocialShareKit = (function () {
         var options = opts || {},
             selector = options.selector || '.ssk';
         this.nodes = $(selector);
+        this.selects = $(selector + '-select');
         this.options = options;
     };
 
@@ -22,11 +23,16 @@ var SocialShareKit = (function () {
         share: function () {
             var els = this.nodes,
                 options = this.options,
-                urlsToCount = {};
+                urlsToCount = {},
+                selects = this.selects;
 
             var _init = function () {
                 if (!els.length)
                     return;
+
+                if (!Element.prototype.matches) {
+                    Element.prototype.matches = Element.prototype.msMatchesSelector;
+                }
 
                 each(els, function (el) {
                     var network = elSupportsShare(el), uniqueKey;
@@ -44,13 +50,15 @@ var SocialShareKit = (function () {
                     addEventListener(el, 'click', onClick);
                     el._skkListener = onClick
 
+                    
+
                     // Gather icons with share counts
                     if (el.parentNode.className.indexOf('ssk-count') !== -1) {
                         network = network[0];
                         uniqueKey = network + sep + getShareUrl(options, network, el);
                         if (!(uniqueKey in urlsToCount)) {
-                            urlsToCount[uniqueKey] = [];
-                        }
+                            urlsToCount[uniqueKey] = [];    
+                        }       
                         urlsToCount[uniqueKey].push(el);
                     }
                 });
@@ -58,10 +66,55 @@ var SocialShareKit = (function () {
                 processShareCount();
             };
 
+            var _select = function (e) {
+                if (window.getSelection) {
+                    var selection = window.getSelection();
+                    if (selection && selection.getRangeAt && selection.rangeCount) {
+                        var strSelection = selection.toString();
+                        var range = selection.getRangeAt(0);
+                        if (range.getClientRects) {
+                            var rects = Array.prototype.slice.call(range.getClientRects());
+                            var total = rects.length;
+                            each(selects, function (el) {
+                                var target = getSelectTarget(options, undefined, el);
+                                if (strSelection === '' || !e.target.matches(target)) {
+                                    el.style.display = 'none';
+                                    return;
+                                }
+                                el.setAttribute('data-text', strSelection);
+                                el.style.display = 'block';
+                                var size = el.getBoundingClientRect();
+                                var top, left;
+                                switch(getSelectPosition(options, undefined, el)) {
+                                    case 'center':
+                                        var min = Math.min.apply(Math, rects.map(function(rect){ return rect.top; }));
+                                        var center = rects.map(function(rect){ return rect.left + rect.width / 2; }).reduce(function(middle, avg){ return avg + middle; }) / total;
+                                        left = (center - size.width / 2);
+                                        top = (min - size.height + window.pageYOffset);
+                                        break;
+                                    case 'left':
+                                        var min = Math.min.apply(Math, rects.map(function(rect){ return rect.top; }));
+                                        top = (min - size.height + window.pageYOffset);
+                                        left = Math.min.apply(Math, rects.map(function(rect){ return rect.left; }));
+                                        break;
+                                    case 'right':
+                                        var min = Math.min.apply(Math, rects.map(function(rect){ return rect.top; }));
+                                        top = (min - size.height + window.pageYOffset);
+                                        left = Math.max.apply(Math, rects.map(function(rect){ return rect.right; })) - size.width;
+                                        break;
+                                }
+                                el.style.top = top + 'px';
+                                el.style.left = left + 'px';
+                            });
+                        }
+                    }
+                }
+            };
+
             if (options.forceInit === true)
                 _init();
             else
-                ready(_init);
+                ready(_init, _select);
 
 
             function onClick(e) {
@@ -137,17 +190,19 @@ var SocialShareKit = (function () {
         return wrap(opts).share();
     }
 
-    function ready(fn) {
+    function ready(fn, select) {
         if (document.readyState != 'loading') {
             fn();
         } else if (document.addEventListener) {
             document.addEventListener('DOMContentLoaded', fn);
+            
         } else {
             document.attachEvent('onreadystatechange', function () {
                 if (document.readyState != 'loading')
                     fn();
             });
         }
+        addEventListener(document, 'mouseup', select);
     }
 
     function $(selector) {
@@ -206,6 +261,28 @@ var SocialShareKit = (function () {
         }
         win.focus();
         return win;
+    }
+
+    function includes(array, item) {
+        for (var i = 0, len = array.length; i < len; i++ ) {
+            if (array[i] === item) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function getSelectPosition(options, network, el) {
+        var validPositions = ['center', 'left', 'right'];
+        var dataOpts = getDataOpts(options, network, el),
+        position = typeof dataOpts['position'] !== 'undefined' && includes(validPositions, dataOpts['position']) ? dataOpts['position'] : 'center';
+        return position;
+    }
+
+    function getSelectTarget(options, network, el) {
+        var dataOpts = getDataOpts(options, network, el),
+        target = typeof dataOpts['target'] !== 'undefined' ? dataOpts['target'] : '*';
+        return target;
     }
 
     function getUrl(options, network, el) {
@@ -306,7 +383,7 @@ var SocialShareKit = (function () {
     }
 
     function getDataOpts(options, network, el) {
-        var validOpts = ['url', 'title', 'text', 'image'],
+        var validOpts = ['url', 'title', 'text', 'image', 'position', 'target'],
             opts = {}, optValue, optKey, dataKey, a, parent = el.parentNode;
         network == 'twitter' && validOpts.push('via');
         for (a in validOpts) {

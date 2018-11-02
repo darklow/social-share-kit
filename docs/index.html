@@ -440,6 +440,23 @@
                 </p>
             </div>
         </div>
+        <div class="col-xs-12 col-sm-12">
+            <div>
+                <h3 class="page-header">Selected Text</h3>
+                <h4>Centered</h4>
+                <p class="select-center">
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sequi quidem sapiente est iure quis modi qui, nostrum corporis rerum sed tempora deleniti sint impedit, tempore dolor, libero consequuntur vel quod?
+                </p>
+                <h4>Aligned Left</h4>
+                <p class="select-left">
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sequi quidem sapiente est iure quis modi qui, nostrum corporis rerum sed tempora deleniti sint impedit, tempore dolor, libero consequuntur vel quod?
+                </p>
+                <h4>Aligned Right</h4>
+                <p class="select-right">
+                    Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sequi quidem sapiente est iure quis modi qui, nostrum corporis rerum sed tempora deleniti sint impedit, tempore dolor, libero consequuntur vel quod?
+                </p>
+            </div>
+        </div>
     </div>
 
     <div class="content-block">
@@ -665,6 +682,20 @@
             </div>
         </blockquote>
 
+        <blockquote>
+            <div class="row">
+                <div class="col-xs-12 col-sm-8">
+                    <h4>Selectable Text Sharing</h4>
+
+                    <p>Add
+                        <code>ssk-select</code>
+                        CSS class to hide until a selection is made.
+                    </p>
+                    <p>Note: <code>ssk-select</code> elements should be placed at the bottom of the <code>body</code> tag, otherwise any relative parent elements will break its positioning.</p>
+                </div>
+            </div>
+        </blockquote>
+
         <h3 class="page-header">Setup JavaScript</h3>
 
         If you want to use share popups, you will also need to include JavaScript file
@@ -743,6 +774,14 @@ SocialShareKit.init({ reinitialize: true });
                 <dt>countCallback</dt>
                 <dd>Networks: Twitter. Default: None.
                     Since Twitter discontinued count API, you can set count manually (by some third party service maybe) using custom count function. See example below.
+                </dd>
+                <dt>target</dt>
+                <dd>Networks: All. Default: "*".
+                    Only used on elements with the class ssk-select. The selector string to match elements that should trigger ssk-select elements when a selection is made within.
+                </dd>
+                <dt>position</dt>
+                <dd>Networks: All. center | left | right. Default: "center".
+                    Only used on elements with the class ssk-select. The position to display the ssk-select element relative to a selection.
                 </dd>
             </dl>
             <p>For example:</p>
@@ -1029,6 +1068,39 @@ SocialShareKit.init({
         </div>
     </div>
 </footer>
+
+<div class="ssk-group ssk-select ssk-sm" data-target=".select-center" data-position="center">
+    <a href="" class="ssk ssk-facebook"></a>
+    <a href="" class="ssk ssk-twitter"></a>
+    <a href="" class="ssk ssk-google-plus"></a>
+    <a href="" class="ssk ssk-pinterest"></a>
+    <a href="" class="ssk ssk-tumblr"></a>
+    <a href="" class="ssk ssk-vk"></a>
+    <a href="" class="ssk ssk-linkedin"></a>
+    <a href="" class="ssk ssk-email"></a>
+</div>
+
+<div class="ssk-group ssk-select ssk-sm" data-target=".select-left" data-position="left">
+    <a href="" class="ssk ssk-facebook"></a>
+    <a href="" class="ssk ssk-twitter"></a>
+    <a href="" class="ssk ssk-google-plus"></a>
+    <a href="" class="ssk ssk-pinterest"></a>
+    <a href="" class="ssk ssk-tumblr"></a>
+    <a href="" class="ssk ssk-vk"></a>
+    <a href="" class="ssk ssk-linkedin"></a>
+    <a href="" class="ssk ssk-email"></a>
+</div>
+
+<div class="ssk-group ssk-select ssk-sm" data-target=".select-right" data-position="right">
+    <a href="" class="ssk ssk-facebook"></a>
+    <a href="" class="ssk ssk-twitter"></a>
+    <a href="" class="ssk ssk-google-plus"></a>
+    <a href="" class="ssk ssk-pinterest"></a>
+    <a href="" class="ssk ssk-tumblr"></a>
+    <a href="" class="ssk ssk-vk"></a>
+    <a href="" class="ssk ssk-linkedin"></a>
+    <a href="" class="ssk ssk-email"></a>
+</div>
 
 
 <!-- Required only for example page and documentation not for Social Share Kit itself -->
