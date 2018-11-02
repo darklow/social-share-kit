@@ -6,7 +6,7 @@
  * ---
  */
 var SocialShareKit = (function () {
-    var supportsShare = /(twitter|facebook|google-plus|pinterest|tumblr|vk|linkedin|buffer|email)/,
+    var supportsShare = /(twitter|facebook|google-plus|pinterest|tumblr|vk|linkedin|buffer|email|xing)/,
         sep = '*|*', wrap, _wrap;
 
     // Wrapper to support multiple instances per page by selector
@@ -254,6 +254,9 @@ var SocialShareKit = (function () {
                 url = 'https://www.linkedin.com/shareArticle?mini=true&url=' + paramsObj.shareUrlEncoded() +
                     '&title=' + encodeURIComponent(title) +
                     '&summary=' + encodeURIComponent(text);
+                break;
+            case 'xing':
+                url = 'https://www.xing.com/spi/shares/new?url=' + paramsObj.shareUrlEncoded();
                 break;
             case 'vk':
                 url = 'https://vkontakte.ru/share.php?url=' + paramsObj.shareUrlEncoded();
