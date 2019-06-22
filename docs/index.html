@@ -11,10 +11,10 @@
 
     <!-- Bootstrap for examples page -->
     <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="docs.css?v=1.0.14">
+    <link rel="stylesheet" href="docs.css?v=1.0.15">
 
     <!-- Social Share Kit CSS -->
-    <link rel="stylesheet" href="../dist/css/social-share-kit.css?v=1.0.14">
+    <link rel="stylesheet" href="../dist/css/social-share-kit.css?v=1.0.15">
 
     <!-- Font Awesome icons -->
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -415,6 +415,7 @@
                 <a href="" class="ssk ssk-icon ssk-reddit2" title="Reddit2"></a>
                 <a href="" class="ssk ssk-buffer" title="Buffer"></a>
                 <a href="" class="ssk ssk-icon ssk-buffer" title="Buffer"></a>
+                <a href="" class="ssk ssk-icon ssk-slack" title="Slack"></a>
             </div>
             <div>
                 <h3 class="page-header">Floating/sticky bar</h3>
@@ -693,7 +694,11 @@ SocialShareKit.init();
 SocialShareKit.init({ forceInit: true });
 &lt;/script&gt;</pre>
 
-        Social Share Kit is keeping track of already initialised items, so in case if your DOM changes, you can call <code>SocialShareKit.init()</code> multiple times.
+        Social Share Kit is keeping track of already initialised items, so in case if your DOM changes, you can call <code>SocialShareKit.init()</code> multiple times. If you would like reinitialize SSK once again to the same DOM elements using other parameters use <code>reinitialize: true</code>:
+
+        <pre class="prettyprint">&lt;script type="text/javascript"&gt;
+SocialShareKit.init({ reinitialize: true });
+&lt;/script&gt;</pre>
 
         <h3 about="page-header">Sharer popup options</h3>
 
@@ -1033,7 +1038,7 @@ SocialShareKit.init({
 
 
 <!-- Social Share Kit JS -->
-<script src="../dist/js/social-share-kit.js?v=1.0.14"></script>
+<script src="../dist/js/social-share-kit.js?v=1.0.15"></script>
 
 
 <script type="text/javascript">
@@ -1043,6 +1048,23 @@ SocialShareKit.init({
         url: 'http://socialsharekit.com',
         twitter: {
             title: 'Social Share Kit',
+            via: 'socialsharekit'
+        },
+        onBeforeOpen: function(targetElement, network, paramsObj){
+            console.log(arguments);
+        },
+        onOpen: function(targetElement, network, url, popupWindow){
+            console.log(arguments);
+        },
+        onClose: function(targetElement, network, url, popupWindow){
+            console.log(arguments);
+        }
+    });
+    SocialShareKit.init({
+        reinitialize: true,
+        url: 'http://socialsharekit.com',
+        twitter: {
+            title: 'Social Share Kit 222222',
             via: 'socialsharekit'
         },
         onBeforeOpen: function(targetElement, network, paramsObj){

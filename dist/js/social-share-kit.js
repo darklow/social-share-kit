@@ -35,10 +35,14 @@ var SocialShareKit = (function () {
                     }
 
                     if (el.getAttribute('data-ssk-ready'))
-                        return;
+                        if (options.reinitialize && el._skkListener) {
+                            removeEventListener(el, 'click', el._skkListener);
+                        } else
+                            return;
 
                     el.setAttribute('data-ssk-ready', true);
                     addEventListener(el, 'click', onClick);
+                    el._skkListener = onClick
 
                     // Gather icons with share counts
                     if (el.parentNode.className.indexOf('ssk-count') !== -1) {
@@ -163,6 +167,13 @@ var SocialShareKit = (function () {
                 handler.call(el);
             });
         }
+    }
+
+    function removeEventListener(el, eventName, handler) {
+        if (el.removeEventListener)
+            el.removeEventListener(eventName, handler);
+        else
+            el.detachEvent('on' + eventName, handler);
     }
 
     function elSupportsShare(el) {
